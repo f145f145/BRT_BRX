@@ -470,8 +470,14 @@ namespace BRX.View
         }
 
 
+
+        #endregion
+
+
+        #region 弹窗提示
+
         /// <summary>
-        /// 试验完成弹窗消息回调
+        /// 弹窗消息回调
         /// </summary>
         /// <param name="msg"></param>
         private async void PopMessage(string msg)
@@ -483,7 +489,7 @@ namespace BRX.View
                 FirstAuxiliaryButtonText = "",
                 ColorScheme = MetroDialogColorScheme.Accented,
                 DialogMessageFontSize = 24,
-                DialogTitleFontSize=36
+                DialogTitleFontSize = 36
             };
             await this.ShowMessageAsync("重要提示：", msg, MessageDialogStyle.Affirmative, mySettings);
         }

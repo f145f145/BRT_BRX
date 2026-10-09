@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\Code\BRT\新不燃性\obj\Debug\
+E:\Work\Uper\BRT_BRX\obj\Debug\
 BRX
 none
 false
 DEBUG;TRACE
-D:\Code\BRT\新不燃性\App.xaml
+E:\Work\Uper\BRT_BRX\App.xaml
 151899329655
 4962614126
 91-1286012612
-102-2067587193
+1021833446669
 View\Authorize\SN_InputView.xaml;View\DevSet\DevSetView_AIOCal.xaml;View\DevSet\DevSetView_AIOChannelParam.xaml;View\DevSet\DevSetView_AIOParam.xaml;View\DevSet\DevSetView_BisicInfo.xaml;View\DevSet\DevSetView_BisicParam.xaml;View\DevSet\DevSetView_CoInfo.xaml;View\DevSet\DevSetView_ComSet.xaml;View\DevSet\DevSetView_PidSet.xaml;View\LoadingView.xaml;View\CenterCalView.xaml;View\WallCalView.xaml;View\MainView.xaml;View\ScrollViewDictionary.xaml;View\UICtl.xaml;
 
 False

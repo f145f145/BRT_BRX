@@ -101,10 +101,10 @@
                 <ComboBox Name="AOModelComb" ItemsSource="{Binding Dev.AOModelTypeList}" SelectionChanged="SelectionChanged" SelectedValue ="{Binding Dev .AOModelType, Mode=TwoWay}" Grid.Row="1" Grid.Column ="1" Width="150" Height="25"/>
 
                 <TextBlock Text="是否有功率模块：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
-                <CheckBox Content="有功率模块" IsChecked ="{Binding Dev.WithPowerSenser,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <CheckBox Content="有功率模块" IsChecked ="{Binding Dev.WithPowerSenser,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Margin="20 0 0 0"/>
 
                 <TextBlock Text="使用回归计算平衡电压：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
-                <CheckBox Content="用线性回归" IsChecked ="{Binding Dev.UseLRCalcU,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <CheckBox Content="用线性回归" IsChecked ="{Binding Dev.UseLRCalcU,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Margin="20 0 0 0"/>
 
                 <TextBlock Text="软启动时长（分钟）：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
                 <TextBlock Text="最大输出电压（%）：" Grid.Row="5" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
@@ -118,6 +118,9 @@
 
                 <TextBlock Text="系统辨识输出V（%）：" Grid.Row="8" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
                 <TextBox Text="{Binding Dev.VOut_ID , Mode=TwoWay}" Grid.Row="8" Grid.Column ="1" Width="150" Height="32"/>
+
+                <TextBlock Text="自动计算T2系数：" Grid.Row="9" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="计算" IsChecked ="{Binding Dev.IsCalcT2K,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="9" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" Margin="20 0 0 0"/>
             </Grid>
         </GroupBox>
 

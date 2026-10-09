@@ -22,6 +22,7 @@ using BRX.View;
 using static BRX.Model.Enums.Enums;
 using CtrlMethod;
 using BRX.Model;
+using System.Threading;
 
 namespace BRX.BLL
 {
@@ -494,19 +495,53 @@ namespace BRX.BLL
         }
 
         /// <summary>
-        /// 差值累积(t2-t1)
+        /// T1累积
         /// </summary>
-        private double _difSum = 0;
+        private double _t1Sum = 0;
         /// <summary>
-        /// 差值累积(t2-t1)
+        /// T1累积
         /// </summary>
-        public double DifSum
+        public double T1Sum
         {
-            get { return _difSum; }
+            get { return _t1Sum; }
             set
             {
-                _difSum = value;
-                RaisePropertyChanged(() => DifSum);
+                _t1Sum = value;
+                RaisePropertyChanged(() => T1Sum);
+            }
+        }
+
+        /// <summary>
+        /// T2累积
+        /// </summary>
+        private double _t2Sum = 0;
+        /// <summary>
+        /// T2累积
+        /// </summary>
+        public double T2Sum
+        {
+            get { return _t2Sum; }
+            set
+            {
+                _t2Sum = value;
+                RaisePropertyChanged(() => T2Sum);
+            }
+        }
+
+        /// <summary>
+        /// 差值累积次数
+        /// </summary>
+        private double _difSumQty = 0;
+        /// <summary>
+        /// 差值累积次数
+        /// </summary>
+        public double DifSumQty
+        {
+            get { return _difSumQty; }
+            set
+            {
+                _difSumQty = value;
+                RaisePropertyChanged(() => DifSumQty);
             }
         }
 
@@ -521,9 +556,10 @@ namespace BRX.BLL
                     return;
                 if (Dev.IsStd2010)
                     return;
+                if (!Dev.IsCalcT2K)
+                    return;
 
-                if ((Dev.AIList[0].ValueFinal >= 742) && (Dev.AIList[1].ValueFinal >= 742) &&
-                    (Dev.AIList[0].ValueFinal <= 758) && (Dev.AIList[1].ValueFinal <= 758))
+                if (((Dev.AIList[0].ValueFinal / 2 + Dev.AIList[1].ValueFinal / 2) >= 740) && ((Dev.AIList[0].ValueFinal / 2 + Dev.AIList[1].ValueFinal / 2) <= 760))
                 {
                     if (!AvergeTime.IsStarted)
                     {
@@ -534,17 +570,34 @@ namespace BRX.BLL
                     TimeSpan tempSpan = DateTime.Now - AvergeTime.StartTime;
                     if (tempSpan.TotalSeconds >= 600)  //均值调零
                     {
-                        double difAvg = DifSum * Dev.Period_BLL / 600000;    //t2-t1的平均值
-                        Dev.AIList[0].ZeroCalValue = difAvg / 2 * Dev.AIList[0].KCalValue;
-                        Dev.AIList[1].ZeroCalValue = -difAvg / 2 * Dev.AIList[1].KCalValue;
+                        double t1Avg = T1Sum / DifSumQty;    //T1平均值
+                        double t2Avg = T2Sum / DifSumQty;    //T2平均值
+                        Dev.AIList[1].KCalValue = (T1Sum- Dev.AIList[1].ZeroCalValue) / T2Sum;
                         IsAverged = true;
+                        Dev.IsCalcT2K = false;
+
+                        //保存数据
+                        var task1 = System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Messenger.Default.Send<string>("SaveDevSettings", "DevDataRWMessage");
+                        }));
+
+                        //弹窗提示
+                        var task = System.Windows.Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            Messenger.Default.Send<string>("T2的系数已计算完毕并保存，相关设定已复位", "PopMessage");
+                        }));
                     }
 
-                    DifSum = DifSum + Dev.AIList[1].ValueCaledNonZero - Dev.AIList[0].ValueCaledNonZero;        //累积差值
+                    T1Sum = T1Sum + Dev.AIList[0].ValueFinal;        //累积T1的数值
+                    T2Sum = T2Sum + Dev.AIList[1].ValueFinal;        //累积T2的数值
+                    DifSumQty++;
                 }
                 else
                 {
-                    DifSum = 0;
+                    T1Sum = 0;
+                    T2Sum = 0;
+                    DifSumQty = 0;
                     AvergeTime.Reset();
                 }
             }
@@ -693,7 +746,9 @@ namespace BRX.BLL
             //自动调零参数复位
             IsAverged = false;
             AvergeTime.Reset();
-            DifSum = 0;
+            T1Sum = 0;
+            T2Sum = 0;
+            DifSumQty = 0;
             IsZeroedWallCal = false;
             ZeroWallCalTime.Reset();
             //软启动复位

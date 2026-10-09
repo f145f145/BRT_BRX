@@ -842,6 +842,25 @@ namespace BRX.Model.Dev
             }
         }
 
+
+        /// <summary>
+        /// 是否计算修正T2斜率
+        /// </summary>
+        private bool _isCalcT2K = false;
+        /// <summary>
+        /// 是否计算修正T2斜率
+        /// </summary>
+        public bool IsCalcT2K
+        {
+            get { return _isCalcT2K; }
+            set
+            {
+                _isCalcT2K = value;
+                RaisePropertyChanged(() => IsCalcT2K);
+            }
+        }
+
+
         /// <summary>
         /// 标准选择（第二个炉内温度）
         /// </summary>

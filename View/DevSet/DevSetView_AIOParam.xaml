@@ -1,0 +1,763 @@
+﻿<mah:MetroWindow x:Class="BRX.View.DevSet.DevSetView_AIOParam"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:BRX.View.DevSet"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 mc:Ignorable="d"
+                 Title="模拟量参数" Height="768" Width="1024"
+                 WindowStartupLocation="CenterScreen" Background="White" ShowInTaskbar="True"
+                 Closing="Window_Closing" WindowState="Normal " ResizeMode ="CanMinimize"
+                 xmlns:converterPath="clr-namespace:BRX.View"
+                 DataContext ="{Binding Source ={StaticResource Locator },Path =MainVM}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=" *"/>
+            <RowDefinition Height=" 60"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <!--=====数据信息===================================================================================================-->
+        <TabControl Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="5" >
+
+            <TabItem Header="【炉内热电偶】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="炉内T1" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="DarkKhaki">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[0].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="炉内T2" Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="BurlyWood">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[1].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【试样热电偶】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="试样中心Tsc" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="LightSkyBlue">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[2].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[2].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="试样表面Tss" Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="DeepSkyBlue">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[3].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[3].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【炉内校准热电偶】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="炉内校准Tfc" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="YellowGreen">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[4].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[4].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【炉壁校准热电偶】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="炉壁0°" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="DarkSeaGreen">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[5].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[5].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="炉壁120°" Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="LightSeaGreen">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[6].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[6].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="炉壁240°" Grid.Row ="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="ForestGreen">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[7].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【控温输出】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="控温输出电压" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="Orange">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AOList[0].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【U/I/P】" mah:HeaderedControlHelper.HeaderFontSize="18" FontSize="16" Visibility="{Binding Dev.WithPowerSenser, Converter={StaticResource BVConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="电压U" Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="White">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[8].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[8].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="电流I" Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="LightGray">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[9].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[9].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="功率P" Grid.Row ="2" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" Background="White">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                                <RowDefinition Height=" Auto"/>
+                                <RowDefinition Height=" *"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row ="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="0"  Margin="-5,-5,-5,0" Padding="0"/>
+                            <TextBlock Text="信号编号" Grid.Row ="0" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].SingalNO,Mode =TwoWay}" Grid.Row ="1" Grid.Column="0" IsEnabled ="False" />
+
+                            <TextBlock Text="信号名称" Grid.Row ="0" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].SingalName,Mode =TwoWay}" Grid.Row ="1" Grid.Column="1" IsEnabled ="False" />
+
+                            <TextBlock Text="单位" Grid.Row ="0" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].SingalUnit,Mode =TwoWay}" Grid.Row ="1" Grid.Column="2" IsEnabled ="False" />
+
+                            <TextBlock Text="量程下限" Grid.Row ="0" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].SingalLowerRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="3" Width="140"/>
+
+                            <TextBlock Text="量程上限" Grid.Row ="0" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].SingalUpperRange,Mode =TwoWay}" Grid.Row ="1" Grid.Column="4" Width="140"/>
+
+                            <TextBlock Text="接口类型" Grid.Row ="0" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <ComboBox ItemsSource="{Binding Dev.InfTypeList}" SelectedItem ="{Binding Dev.AIList[10].InfType,Mode =TwoWay}" Grid.Row="1" Grid.Column ="5" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号单位" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ElecSig_Unit,Mode =TwoWay}" Grid.Row ="3" Grid.Column="0" IsEnabled ="False"/>
+
+                            <TextBlock Text="电信号下限" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ElecSigLowerRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="1" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="电信号上限" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ElecSigUpperRange,Mode =TwoWay}" Grid.Row ="3" Grid.Column="2" Width="140" IsEnabled =" False" />
+
+                            <TextBlock Text="接入模块" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ModulNO,Mode =TwoWay}" Grid.Row ="3" Grid.Column="3" IsEnabled =" False" />
+
+                            <TextBlock Text="通道序号" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ChannelSerialNO,Mode =TwoWay}"  Grid.Row ="3" Grid.Column="4" ToolTip ="该信号在模块中的序号，从1开始" IsEnabled ="False" />
+
+                            <TextBlock Text="转换比率" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding Dev.AIList[10].ConvRatio,Mode =TwoWay}" Grid.Row ="3" Grid.Column="5" ToolTip ="信号实际值=传输数据*比率"  Width="140"/>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+        <Button Content="保存设置" Command="{Binding MainWinCommand}" CommandParameter="8299" Grid.Row="1" Grid.Column ="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsDefault="True"/>
+        <Button Content="取消修改" Command="{Binding MainWinCommand}" CommandParameter="8199"  Grid.Row="1" Grid.Column ="1"  HorizontalAlignment="Right" VerticalAlignment="Center" IsCancel="True"/>
+        <TextBlock Text="修改后请先保存再关闭窗口！" Margin ="10"  Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}" FontSize="20" FontWeight="Bold" Foreground="OrangeRed"/>
+    </Grid>
+</mah:MetroWindow>

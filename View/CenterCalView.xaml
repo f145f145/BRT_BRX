@@ -1,0 +1,1899 @@
+﻿<mah:MetroWindow  x:Class="BRX.View.CenterCalView"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:BRX.View"
+                   xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+                  xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                  GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+                  xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+                  mc:Ignorable="d"
+                  Title="不燃性测试仪—炉内校准"
+                  Width="1366" Height="768"
+                  WindowStartupLocation="CenterScreen" Background="White" ShowInTaskbar="True"
+                  Closing="Window_Closing" WindowState="Normal " ResizeMode ="CanMinimize"
+                  DataContext ="{Binding Source ={StaticResource Locator },Path =CalVM}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <!--=====主页面===================================================================================================-->
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Margin="5">
+            <!--===========炉内校准试验===========-->
+            <TabItem Header="【炉内校准试验】" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="150" MinHeight="60" MaxHeight="500"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth ="300" MaxWidth="1200"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="600"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="炉内温度校准" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource TextBlock1}" FontSize="24" FontWeight="Bold"/>
+                    <Button Content="关闭炉内校准" Command="{Binding CalWinCommand}" CommandParameter="5212" Grid.Row="0" Grid.Column ="2" Width="150" Height="40" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+
+                    <!--左上半屏，参数、状态-->
+                    <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Padding="5"  Background="DarkKhaki">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="炉内温度1：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}" Margin="0"/>
+                            <TextBlock Text="炉内温度2：" Grid.Row="0" Grid.Column ="2" Style="{StaticResource TextBlock2}" Margin="0" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+                            <TextBlock Text="输出电压：" Grid.Row="0" Grid.Column ="4" Style="{StaticResource TextBlock2}" Margin="0"/>
+                            <TextBox Text="{Binding Dev.AIList[0].ValueFinal, StringFormat={}{0:0.00} ℃}" Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox2}" IsReadOnly="True"/>
+                            <TextBox Text="{Binding Dev.AIList[1].ValueFinal, StringFormat={}{0:0.00} ℃}" Grid.Row="0" Grid.Column="3" Style="{StaticResource TextBox2}" IsReadOnly="True" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+                            <TextBox Text="{Binding Dev.AOList[0].ValueFinal, StringFormat={}{0:0.00} %}" Grid.Row="0" Grid.Column="5" Style="{StaticResource TextBox2}" IsReadOnly="True" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+
+                            <TextBlock Text="校准点温度：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}" Margin="0"/>
+                            <TextBox Text="{Binding Dev.AIList[7].ValueFinal, StringFormat={}{0:0.00} ℃}" Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBox2}"  IsReadOnly="True"/>
+                        </Grid>
+                    </Border>
+
+                    <!--横向分割线-->
+                    <GridSplitter Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Height="3" VerticalAlignment="Center" HorizontalAlignment="stretch"/>
+                    <!--左下屏-->
+                    <Grid Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" Margin="5" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                            <d3:ChartPlotter x:Name="ChartPlotterCenter1"  LegendVisible="False">
+                                <d3:VerticalAxisTitle x:Name="AxisY_Default_TitleCenter1" Content="温度" />
+                                <d3:AxisGrid Visibility ="Visible "></d3:AxisGrid>
+                                <d3:LineGraph Name="LineCenter1" StrokeThickness="0.6" DataSource="{Binding PlotLines[0].LineDataSource}" Stroke ="Red"></d3:LineGraph>
+                                <d3:LineGraph Name="LineCenter2" StrokeThickness="0.6" DataSource="{Binding PlotLines[1].LineDataSource}" Stroke ="Blue"></d3:LineGraph>
+                                <d3:LineGraph Name="LineCenter3" StrokeThickness="0.6" DataSource="{Binding PlotLines[7].LineDataSource}" Stroke ="Green"></d3:LineGraph>
+                                <d3:Legend Name="LegendLeft" HorizontalAlignment ="Left" />
+                                <d3:CursorCoordinateGraph  Name="CrossCenter1" AutoHide="True" />
+                            </d3:ChartPlotter>
+                        </Border>
+                       </Grid>
+                    <!--纵向分割线-->
+                    <GridSplitter Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" Width="3" VerticalAlignment="stretch" HorizontalAlignment="Stretch"/>
+
+                    <!--右半屏，实验总体信息及操作-->
+                    <Grid  Grid.Row="1" Grid.RowSpan="4" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="260"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.75*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0" Background="DarkKhaki">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="当前校准：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding CenterCalDQ.IsCompleted, Converter={StaticResource BTConverter},Mode=OneWay}" Grid.Row="0" Grid.Column ="1" ToolTip="当前试验完成情况" Style="{StaticResource TextBox4}" FontWeight="Bold" FontSize="20" IsReadOnly="True"/>
+                                <TextBox Text="{Binding CenterCalDQ.ExpNO, Mode=OneWay}" Grid.Row="1" Grid.Column ="0" Grid.ColumnSpan="4"  Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBlock Text="完成数量：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding CenterCalDQ.QtyComplete,Mode=OneWay}" Grid.Row="2" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBlock Text="/" Grid.Row="2" Grid.Column ="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="30" Grid.Row="2" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0" Background="Bisque">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="60"/>
+                                    <RowDefinition Height="60"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="开始检测" Command="{Binding CalWinCommand}" CommandParameter="1103" Grid.Row="0" Grid.Column ="0" Width="90" Height="50" IsEnabled="{Binding Dev.IsNotBusy}"/>
+                                <Button Content="停止检测" Command="{Binding CalWinCommand}" CommandParameter="1203" Grid.Row="0" Grid.Column ="1" Grid.ColumnSpan="3" Width="90" Height="50"  Foreground="Red" IsEnabled="{Binding Dev.IsBusy}"/>
+                                <Button Content="当前点就绪" Command="{Binding CalWinCommand}" CommandParameter="1803" Grid.Row="1" Grid.Column ="0" Grid.ColumnSpan="1" Width="90" Height="50" ToolTip="将热电偶调整到位后再按下按钮" IsEnabled="{Binding Dev.IsBusy}"/>
+                                <Button Content="当前点停止" Command="{Binding CalWinCommand}" CommandParameter="1813" Grid.Row="1" Grid.Column ="1" Grid.ColumnSpan="3" Width="90" Height="50" IsEnabled="{Binding CenterCalDQ.IsTesting}"/>
+
+                                <TextBlock Text="当前高度：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding CenterCalDQ.HeightPointDQ.PointH,StringFormat=\{0:F0\} mm,Mode=OneWay}" Grid.Row="2" Grid.Column ="1" Grid.ColumnSpan="2" Style="{StaticResource TextBox4}" IsReadOnly="True" ToolTip="测点高度"/>
+                                <TextBox Text="{Binding CenterCalDQ.HeightPointDQ.Dir, Converter={StaticResource BDConverter}}" Grid.Row="2" Grid.Column ="3" Grid.ColumnSpan="1" Style="{StaticResource TextBox4}" IsReadOnly="True" ToolTip="校准测试行进方向"/>
+
+                                <TextBlock Text="高度切换：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <Button Command="{Binding CalWinCommand}" CommandParameter="1603" Grid.Row="3" Grid.Column ="1" Height="30" Width="30" Template="{StaticResource Button--}" ToolTip="前一高度" IsEnabled="{Binding CenterCalDQ.IsNotTesting}" />
+                                <TextBox Text="{Binding CenterCalDQ.HeightPointDQ.IsReced, Converter={StaticResource BTConverter},Mode=OneWay}" Grid.Row="3" Grid.Column ="2" Style="{StaticResource TextBox4}" FontWeight="Bold" FontSize="20" IsReadOnly="True" ToolTip="当前点完成情况" />
+                                <Button Command="{Binding CalWinCommand}" CommandParameter="1703" Grid.Row="3" Grid.Column ="3" Height="30" Width="30" Template="{StaticResource Button++}" ToolTip="后一高度" IsEnabled="{Binding CenterCalDQ.IsNotTesting}" />
+
+                                <TextBlock Text="起始时间：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding CenterCalDQ.HeightPointDQ.TimePoint.StartTime, StringFormat=yyyy-MM-dd HH:mm:ss,Mode=OneWay}" Grid.Row="4" Grid.Column ="1" Grid.ColumnSpan="3" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBlock Text="运行时长：" Grid.Row="5" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding CenterCalDQ.HeightPointDQ.TimePoint.TimeFromStart, Converter={StaticResource DoubleToMMSSConverter},Mode=OneWay}" Grid.Row="5" Grid.Column ="1" Grid.ColumnSpan="3" Style="{StaticResource TextBox4}" IsReadOnly="True" ToolTip="当前点就绪后的时间"/>
+
+                                <Button Content="记录当前点温度" Command="{Binding CalWinCommand}" CommandParameter="1903" Grid.Row="6" Grid.Column ="0" Grid.ColumnSpan="4" Width="200" Height="50" IsEnabled="{Binding Dev.T1StbBalanceEst.IsFitAll}"/>
+                            </Grid>
+                        </Border>
+
+                        <GroupBox Header="温度平衡参数" Grid.Row="0"  Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" BorderBrush="Black" FontSize="26" Background="BurlyWood"  mah:HeaderedControlHelper.HeaderFontSize="16">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="3*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="平衡时间(min)：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.TimeEqu, Converter={StaticResource IntToMMSSConverter},Mode=OneWay}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+
+                                <TextBlock Text="T1温度漂移(℃)：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="T1平均温度(℃)：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="T1最大偏差(℃)：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.EDrift,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="1" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.Y_Avg,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="2" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.DeviationMax,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="3" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+
+                                <TextBlock Text="2" Grid.Row="1" Grid.Column ="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                                <TextBlock Text="10" Grid.Row="3" Grid.Column ="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                                <Ellipse Fill="{Binding Dev.T1StbBalanceEst.IsDriftMeetsReqs, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="1" Grid.Column ="3"/>
+                                <Ellipse Fill="{Binding Dev.T1StbBalanceEst.IsDeviationMeetsReqs, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="3" Grid.Column ="3"/>
+
+                                <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="1" CornerRadius="0"  Margin="0" Padding="0" Background="BurlyWood"  Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}">
+                                    <Grid >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="30"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="T2温度漂移(℃)：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                        <TextBlock Text="T2平均温度(℃)：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                        <TextBlock Text="T2最大偏差(℃)：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                        <TextBox Text="{Binding Dev.T2StbBalanceEst.EDrift,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                        <TextBox Text="{Binding Dev.T2StbBalanceEst.Y_Avg,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="1" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                        <TextBox Text="{Binding Dev.T2StbBalanceEst.DeviationMax,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="2" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+
+                                        <TextBlock Text="2" Grid.Row="0" Grid.Column ="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                                        <TextBlock Text="10" Grid.Row="2" Grid.Column ="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                                        <Ellipse Fill="{Binding Dev.T2StbBalanceEst.IsDriftMeetsReqs, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="0" Grid.Column ="3"/>
+                                        <Ellipse Fill="{Binding Dev.T2StbBalanceEst.IsDeviationMeetsReqs, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="2" Grid.Column ="3"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Header="温度控制参数" Grid.Row="2"  Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" 
+                                  BorderBrush="Black" FontSize="26" Background="BurlyWood" mah:HeaderedControlHelper.HeaderFontSize="16">
+                            <Grid >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="稳定时间(min)" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="控温目标(℃)：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="偏差范围(℃)：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="当前温度1(℃)：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                                <TextBlock Text="当前温度2(℃)：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.TimeEqu, Converter={StaticResource IntToMMSSConverter},Mode=OneWay}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.ValueAim,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="1" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.T1StbBalanceEst.EPermit,StringFormat=\{0:F2\} ℃, Mode=OneWay}" Grid.Row="2" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.AIList[0].ValueFinal, StringFormat={}{0:0.00} ℃}" Grid.Row="3" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                                <TextBox Text="{Binding Dev.AIList[1].ValueFinal, StringFormat={}{0:0.00} ℃}" Grid.Row="4" Grid.Column ="1" Style="{StaticResource TextBox4}" IsReadOnly="True" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+
+                                <Ellipse Fill="{Binding Dev.T1StbBalanceEst.IsStabilized, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="3" Grid.Column ="3"/>
+                                <Ellipse Fill="{Binding Dev.T2StbBalanceEst.IsStabilized, Converter={StaticResource BGConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="4" Grid.Column ="3" Visibility="{Binding Dev.IsStd2023, Converter={StaticResource BVConverter}}"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+
+            <!--===========炉内校准管理===========-->
+            <TabItem Header="【炉内校准管理】" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" mah:HeaderedControlHelper.HeaderForeground="{x:Null}" mah:TabControlHelper.UnderlineBrush="Blue" mah:TabControlHelper.CloseButtonEnabled="True" mah:TabControlHelper.UnderlineSelectedBrush="#CCFFFF00">
+                <Grid  Background ="DarkKhaki">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.2*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.8*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--试验列表-->
+                    <Border Grid.Row="0" Grid.Column ="0" Grid.RowSpan ="5" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Background="Bisque" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="炉内校准试验清单" Grid.Row="0" Style="{StaticResource TextBlock1}" FontSize="20" FontWeight="Bold"/>
+                            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Margin="0" 
+                                      IsReadOnly="False"
+                                      AutoGenerateColumns="False" 
+                                      CanUserSortColumns="True"
+                                      CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                      CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                      ItemsSource="{Binding CenterCalTable}"
+                                      SelectedValuePath="试验编号"
+                                      SelectedValue="{Binding SelectedNOStr_CenterCal}"
+                                      Background="BurlyWood" Width="1700">
+                                    <DataGrid.Resources>
+                                        <Style TargetType="ScrollBar">
+                                            <Style.Triggers>
+                                                <Trigger Property="Orientation" Value="Vertical">
+                                                    <Setter Property="Width" Value="30"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="试验编号" Width="Auto" MinWidth="200" Binding="{Binding 试验编号,Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="5上" Width="*" Binding="{Binding 完成标志5U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="5下" Width="*" Binding="{Binding 完成标志5D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="15上" Width="*" Binding="{Binding 完成标志15U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="15下" Width="*" Binding="{Binding 完成标志15D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="25上" Width="*" Binding="{Binding 完成标志25U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="25下" Width="*" Binding="{Binding 完成标志25D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="35上" Width="*" Binding="{Binding 完成标志35U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="35下" Width="*" Binding="{Binding 完成标志35D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="45上" Width="*" Binding="{Binding 完成标志45U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="45下" Width="*" Binding="{Binding 完成标志45D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="55上" Width="*" Binding="{Binding 完成标志55U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="55下" Width="*" Binding="{Binding 完成标志55D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="65上" Width="*" Binding="{Binding 完成标志65U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="65下" Width="*" Binding="{Binding 完成标志65D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="75上" Width="*" Binding="{Binding 完成标志75U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="75下" Width="*" Binding="{Binding 完成标志75D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="85上" Width="*" Binding="{Binding 完成标志85U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="85下" Width="*" Binding="{Binding 完成标志85D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="95上" Width="*" Binding="{Binding 完成标志95U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="95下" Width="*" Binding="{Binding 完成标志95D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="105上" Width="*" Binding="{Binding 完成标志105U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="105下" Width="*" Binding="{Binding 完成标志105D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="115上" Width="*" Binding="{Binding 完成标志115U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="115下" Width="*" Binding="{Binding 完成标志115D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="125上" Width="*" Binding="{Binding 完成标志125U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="125下" Width="*" Binding="{Binding 完成标志125D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="135上" Width="*" Binding="{Binding 完成标志135U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="135下" Width="*" Binding="{Binding 完成标志135D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="145上" Width="*" Binding="{Binding 完成标志145U,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                        <DataGridTextColumn Header="145下" Width="*" Binding="{Binding 完成标志145D,Converter={StaticResource BTConverter},Mode=OneWay}"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <!--关闭试验-->
+                    <Border Grid.Row="1" Grid.Column ="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Background="BurlyWood" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="当前校准：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock1}" ToolTip="当前正在进行的炉内校准试验"/>
+                            <TextBox Text="{Binding CenterCalDQ .ExpNO }" Grid.Row="0"  Grid.Column ="1" IsReadOnly="True"  Style="{StaticResource TextBox4}" ToolTip="当前正在进行的炉内校准试验" Background="LightGray"/>
+                            <Button Content="关闭当前试验" Command="{Binding CalWinCommand}" CommandParameter="2403" Grid.Row="1"  Grid.Column ="1" ToolTip="关闭当前试验后载入默认试验DefaultCenterCal"/>
+                        </Grid>
+                    </Border>
+
+                    <!--载入、删除试验-->
+                    <Border Grid.Row="2" Grid.Column ="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="BurlyWood" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="选中的试验：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock1}" />
+                            <TextBox Text="{Binding SelectedNOStr_CenterCal}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox3}" Grid.ColumnSpan="3" IsReadOnly="True" />
+                            <Button Content="载入选中试验" Command="{Binding CalWinCommand}" CommandParameter="2303" Grid.Row="1" Grid.Column ="0" Grid.ColumnSpan="2"/>
+                            <Button Content="删除选中试验" Command="{Binding CalWinCommand}" CommandParameter="2203" Grid.Row="1" Grid.Column ="2" Grid.ColumnSpan="2"/>
+                        </Grid>
+                    </Border>
+
+                    <!--复制试验-->
+                    <Border Grid.Row="3" Grid.Column ="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="BurlyWood" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="选中的编号：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock1}" />
+                            <TextBlock Text="新试验编号：" Grid.Row="1"  Grid.Column="0" Style="{StaticResource TextBlock1}" />
+                            <TextBox Text="{Binding SelectedNOStr_CenterCal}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox3}" IsReadOnly="True"/>
+                            <TextBox Text="{Binding ExpNOCopyNew_CenterCal, Mode=OneWayToSource}" Grid.Row="1" Grid.Column ="1" Style="{StaticResource TextBox4}" ToolTip ="新的试验编号，英文字符、阿拉伯数字、连字符-或下划线，长度1～50"/>
+                            <Button Content="复制选中试验" Command="{Binding CalWinCommand}" CommandParameter="2703" Grid.Row="2" Grid.Column ="1"/>
+                        </Grid>
+                    </Border>
+
+                    <!--新建试验-->
+                    <Border Grid.Row="4" Grid.Column ="1" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="5" Background="BurlyWood" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="新试验编号：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock1}" />
+                            <TextBox Text="{Binding ExpNONew_CenterCal, Mode=OneWayToSource}" Grid.Row="0" Grid.Column ="1" Style="{StaticResource TextBox4}" ToolTip ="新增试验编号，英文字符、阿拉伯数字、连字符-或下划线，长度1～50"  />
+                            <Button Content="新建试验" Command="{Binding CalWinCommand}" CommandParameter="2103"  Grid.Row="1" Grid.Column ="1"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+
+            <!--===========校准参数设置===========-->
+            <TabItem Header="【校准参数设置】" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" mah:HeaderedControlHelper.HeaderForeground="{x:Null}" mah:TabControlHelper.UnderlineBrush="Blue" mah:TabControlHelper.CloseButtonEnabled="True" mah:TabControlHelper.UnderlineSelectedBrush="#CCFFFF00">
+                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background="DarkKhaki">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="试  验  编  号：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock2}"/>
+                        <TextBlock Text="检测日期：" Grid.Row="0"  Grid.Column="2" Style="{StaticResource TextBlock2}"/>
+                        <TextBlock Text="试验补充说明：" Grid.Row="1"  Grid.Column="0" Style="{StaticResource TextBlock2}"/>
+                        <TextBox Text="{Binding CenterCalDQ .ExpNO}" Grid.Row="0"  Grid.Column ="1" IsReadOnly="True" Width="300"/>
+                        <DatePicker Text="{Binding CenterCalDQ.CreatTime, Mode=TwoWay, StringFormat=yyyy-MM-dd}" Grid.Row="0" Grid.Column="3" VerticalContentAlignment="Center" Height="40" Width="300" FontSize ="18" Margin="5"/>
+                        <TextBox Text="{Binding CenterCalDQ .ExpDetail, Mode=TwoWay}" Grid.Row="1"  Grid.Column ="1" Grid.ColumnSpan="3" Width="950"/>
+                        
+                        <Button Content="保存设置" Command="{Binding CalWinCommand}" CommandParameter="2503"  Grid.Row="2" Grid.Column ="1"/>
+                        <Button Content="取消修改" Command="{Binding CalWinCommand}" CommandParameter="2603"  Grid.Row="2" Grid.Column ="3" HorizontalAlignment ="Right " Margin ="0,0,100,0"/>
+                    </Grid>
+                </Border>
+            </TabItem>
+
+
+            <!--===========校准数据===========-->
+            <TabItem Header="【校准数据】" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="140"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1.3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background="DarkKhaki">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="55"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="校准编号：" Grid.Row="0"  Grid.Column="0" Style="{StaticResource TextBlock2}"/>
+                            <TextBox Text="{Binding CenterCalDQ.ExpNO, Mode=OneWay}" Grid.Row="0" Grid.Column ="1" Grid.ColumnSpan="3"  Style="{StaticResource TextBox4}" IsReadOnly="True"/>
+                            <TextBox Text="{Binding CenterCalDQ.IsCompleted, Converter={StaticResource BTConverter},Mode=OneWay}" Grid.Row="0" Grid.Column ="4" Width="50" ToolTip="当前试验整体完成情况" Style="{StaticResource TextBox4}" FontWeight="Bold" FontSize="20" IsReadOnly="True"/>
+
+                            <TextBlock Text="高度点数：" Grid.Row="0"  Grid.Column="5" Style="{StaticResource TextBlock2}"/>
+                            <TextBox Text="30" Grid.Row="0" Grid.Column ="6" Style="{StaticResource TextBox4}" Width="50" IsReadOnly="True"/>
+                            <TextBlock Text="完成数量：" Grid.Row="0"  Grid.Column="7" Style="{StaticResource TextBlock2}"/>
+                            <TextBox Text="{Binding CenterCalDQ.QtyComplete, Mode=OneWay}" Grid.Row="0" Grid.Column ="8" Style="{StaticResource TextBox4}" Width="50" IsReadOnly="True"/>
+                            <TextBlock Text="剩余数量：" Grid.Row="0"  Grid.Column="9" Style="{StaticResource TextBlock2}"/>
+                            <TextBox Text="{Binding CenterCalDQ.QtyLeft, Mode=OneWay}" Grid.Row="0" Grid.Column ="10" Style="{StaticResource TextBox4}" Width="50" IsReadOnly="True"/>
+
+                            <Button Content="重新计算" Command="{Binding CalWinCommand}" CommandParameter="3303" Grid.Row="1" Grid.Column ="3" Grid.ColumnSpan="2" Width="120" Height="50" IsEnabled="{Binding Dev.IsNotBusy}"/>
+                            <Button Content="保存数据" Command="{Binding CalWinCommand}" CommandParameter="3103" Grid.Row="1" Grid.Column ="5" Grid.ColumnSpan="2" Width="120" Height="50"/>
+                            <Button Content="导出报告" Command="{Binding CalWinCommand}" CommandParameter="3503" Grid.Row="1" Grid.Column ="7" Grid.ColumnSpan="2" Width="120" Height="50"/>
+                            <Button Content="清空所有数据" Command="{Binding CalWinCommand}" CommandParameter="3403" Grid.Row="1" Grid.Column ="9" Grid.ColumnSpan="2" Width="120" Height="50" IsEnabled="{Binding Dev.IsNotBusy}" Foreground="Red"/>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Background="White">
+                        <!--此处禁用datatooltip，动画速度单位是时:分:秒-->
+                        <lvc:CartesianChart LegendLocation="Top">
+                            <!--X坐标轴-->
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Name="高度" Title="温度" FontSize="18">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator IsEnabled="False"></lvc:Separator>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                            <!--Y坐标轴-->
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis x:Name="AxisYName" Title="高度" Position="LeftBottom" FontWeight="ExtraLight" MaxValue="160" ShowLabels="True" MinValue="0" FontSize="18">
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.Series>
+                                <!--曲线1参数-->
+                                <lvc:LineSeries x:Name="TMax"
+                                                Title="TMax"
+                                                Values="{Binding MaxValues}" 
+                                                PointGeometry="{x:Static lvc:DefaultGeometries.Circle}" 
+                                                PointGeometrySize="7"
+                                                LineSmoothness="1"
+                                                StrokeThickness="1" 
+                                                Stroke="OrangeRed"
+                                                Fill="Transparent">
+                                </lvc:LineSeries>
+                                <!--曲线2参数-->
+                                <lvc:LineSeries x:Name="TMmin"
+                                                Title="Tmin"
+                                                Values="{Binding MinValues}" 
+                                                PointGeometry="{x:Static lvc:DefaultGeometries.Square}" 
+                                                PointGeometrySize="7"
+                                                LineSmoothness="1"
+                                                StrokeThickness="1" 
+                                                Stroke="DeepSkyBlue"
+                                                Fill="Transparent">
+                                </lvc:LineSeries>
+                                <!--曲线3参数-->
+                                <lvc:LineSeries x:Name="Ttest"
+                                                Title="Ttest"
+                                                Values="{Binding TestValues}" 
+                                                PointGeometry="{x:Static lvc:DefaultGeometries.Cross}" 
+                                                PointGeometrySize="7"
+                                                LineSmoothness="1"
+                                                StrokeThickness="1" 
+                                                Stroke="Green"
+                                                Fill="Transparent">
+                                </lvc:LineSeries>
+                            </lvc:CartesianChart.Series>
+                        </lvc:CartesianChart>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="5" Background="BurlyWood"
+                                   HorizontalScrollBarVisibility="Visible"  VerticalScrollBarVisibility="Visible" >
+                        <Grid Height="800" Width="900">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="1" Grid.Column="8" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+
+                            <Border Grid.Row="2" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="2" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="3" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="4" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="4" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="5" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="5" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="6" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="6" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="7" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="7" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="8" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="8" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="9" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="9" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="10" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="10" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="11" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="11" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="12" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="12" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="13" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="13" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="14" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="14" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="15" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="15" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="16" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="16" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="17" Grid.Column="0" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="1" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="2" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="3" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="4" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="5" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="6" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="7" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="8" BorderBrush="Black" BorderThickness="1,1,0,0" Margin="0"/>
+                            <Border Grid.Row="17" Grid.Column="9" BorderBrush="Black" BorderThickness="1,1,1,0" Margin="0"/>
+
+                            <Border Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1,1,0,1" Margin="0"/>
+                            <Border Grid.Row="18" Grid.Column="2" Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="1,1,0,1" Margin="0"/>
+                            <Border Grid.Row="18" Grid.Column="4" Grid.ColumnSpan="6" BorderBrush="Black" BorderThickness="1,1,1,1" Margin="0"/>
+
+                            <TextBlock Text="计算数据" Grid.Row="0"  Grid.Column="0" Grid.ColumnSpan="7" FontSize="20" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text=" 测点&#13; 高度&#13;(mm)" Grid.RowSpan="2" Grid.Row="1"  Grid.Column="0" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text="温度下限&#13;    (℃)" Grid.RowSpan="2" Grid.Row="1"  Grid.Column="1" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text="温度上限&#13;    (℃)" Grid.RowSpan="2" Grid.Row="1"  Grid.Column="2" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text="校准点温度&#13;   (Tfc,℃)" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text="炉内温度1&#13;   (T1,℃)" Grid.Row="1"  Grid.Column="6" Grid.ColumnSpan="2" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBlock Text="炉内温度2&#13;   (T2,℃)" Grid.Row="1"  Grid.Column="8" Grid.ColumnSpan="2" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+
+                            <TextBlock Text="上行" Grid.Row="2"  Grid.Column="3" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="下行" Grid.Row="2"  Grid.Column="4" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="平均值" Grid.Row="2"  Grid.Column="5" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="上行" Grid.Row="2"  Grid.Column="6" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="下行" Grid.Row="2"  Grid.Column="7" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="上行" Grid.Row="2"  Grid.Column="8" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="下行" Grid.Row="2"  Grid.Column="9" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+
+                            <TextBlock Text="145" Grid.Row="3"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="135" Grid.Row="4"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="125" Grid.Row="5"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="115" Grid.Row="6"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="105" Grid.Row="7"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="95" Grid.Row="8"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="85" Grid.Row="9"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="75" Grid.Row="10"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="65" Grid.Row="11"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="55" Grid.Row="12"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="45" Grid.Row="13"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="35" Grid.Row="14"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="25" Grid.Row="15"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="15" Grid.Row="16"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="5" Grid.Row="17"  Grid.Column="0" FontWeight="Bold" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+
+                            <TextBlock Text="639" Grid.Row="3"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="664" Grid.Row="4"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="683" Grid.Row="5"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="698" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="709" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="717" Grid.Row="8"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="722" Grid.Row="9"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="723" Grid.Row="10"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="720" Grid.Row="11"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="712" Grid.Row="12"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="699" Grid.Row="13"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="679" Grid.Row="14"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="652" Grid.Row="15"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="616" Grid.Row="16"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="570" Grid.Row="17"  Grid.Column="1" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+
+                            <TextBlock Text="671" Grid.Row="3"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="698" Grid.Row="4"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="716" Grid.Row="5"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="729" Grid.Row="6"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="737" Grid.Row="7"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="743" Grid.Row="8"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="746" Grid.Row="9"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="747" Grid.Row="10"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="746" Grid.Row="11"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="743" Grid.Row="12"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="736" Grid.Row="13"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="724" Grid.Row="14"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="705" Grid.Row="15"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="678" Grid.Row="16"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+                            <TextBlock Text="639" Grid.Row="17"  Grid.Column="2" HorizontalAlignment="Center" Style="{StaticResource TextBlock2}"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[22].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[21].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[20].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[19].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[18].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[17].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[16].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[15].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[14].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[13].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[12].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[11].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[10].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[9].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[8].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="3" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[23].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[24].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[25].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[26].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[27].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[28].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[29].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[0].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[1].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[2].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[3].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[4].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[5].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[6].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[7].Tfc,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="4" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[14],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[13],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[12],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[11],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[10],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[9],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[8],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[7],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[6],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[5],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[4],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[3],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[2],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[1],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.TAvgList[0],StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="5" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[22].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[21].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[20].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[19].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[18].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[17].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[16].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[15].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[14].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[13].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[12].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[11].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[10].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[9].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[8].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="6" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[23].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[24].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[25].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[26].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[27].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[28].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[29].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[0].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[1].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[2].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[3].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[4].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[5].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[6].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[7].Tf1,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="7" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[22].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[21].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[20].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[19].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[18].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[17].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[16].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[15].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[14].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[13].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[12].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[11].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[10].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[9].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[8].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="8" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[23].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="3" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[24].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="4" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[25].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="5" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[26].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="6" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[27].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="7" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[28].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="8" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[29].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="9" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[0].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="10" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[1].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="11" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[2].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="12" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[3].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="13" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[4].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="14" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[5].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="15" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[6].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="16" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                            <TextBox Text="{Binding CenterCalDQ.CenterCalPointsList[7].Tf2,StringFormat=\{0:F2\}, Mode=OneWay}" Grid.Row="17" Grid.Column ="9" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+
+                            <TextBlock Text="总评定" Grid.Row="18"  Grid.Column="0"  Grid.ColumnSpan="2" FontWeight="Bold" Style="{StaticResource TextBlock1}"/>
+                            <TextBox Text="{Binding CenterCalDQ.Result, Mode=OneWay}" Grid.Row="18" Grid.Column ="2"  Grid.ColumnSpan="2" Style="{StaticResource TextBox4}" IsReadOnly="True" Margin="1"/>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+
+
+            <!--===========原始数据===========-->
+            <TabItem Header="【原始数据】" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                <TabControl>
+                    <TabItem Header="[5上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[8].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[5下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[7].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[15上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[9].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[15下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[6].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[25上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[10].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[25下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[5].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[35上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[11].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[35下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[4].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[45上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[12].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[45下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[3].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[55上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[13].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[55下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[2].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[65上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[14].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[65下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[1].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[75上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[15].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[75下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[0].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[85上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[16].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[85下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[29].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[95上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[17].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[95下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[28].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[105上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[18].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[105下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[27].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[115上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[19].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[115下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[26].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[125上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[20].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[125下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[25].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[135上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[21].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[135下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[24].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+                    <TabItem Header="[145上]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[22].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+                    <TabItem Header="[145下]" IsEnabled="True" mah:HeaderedControlHelper.HeaderFontSize="16" >
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="0">
+                            <DataGrid HorizontalAlignment ="Stretch"  VerticalAlignment="Stretch" Background="LightCyan"
+                                                  IsReadOnly="False"
+                                                  AutoGenerateColumns="False" 
+                                                  CanUserSortColumns="True"
+                                                  CanUserResizeColumns="True " CanUserResizeRows="True"  SelectionMode="Single"
+                                                  CanUserReorderColumns="True" AlternationCount="2"  RowHeaderWidth="0" CanUserAddRows="False" 
+                                                  ItemsSource="{Binding CenterCalDQ.CenterCalPointsList[23].RecList_CenterCal}"
+                                                  SelectedValuePath="RecNO">
+                                <DataGrid.Resources>
+                                    <Style TargetType="ScrollBar">
+                                        <Style.Triggers>
+                                            <Trigger Property="Orientation" Value="Vertical">
+                                                <Setter Property="Width" Value="30"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="序号" Width="Auto" Binding="{Binding RecNum,Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="记录时间" Width="Auto" Binding="{Binding RecTime, StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}',Mode=OneWay}" MinWidth="100"/>
+                                    <DataGridTextColumn Header="炉内Tf1 ℃" Width="*" Binding="{Binding Tf1, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉内Tf2 ℃" Width="*" Binding="{Binding Tf2, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="炉壁T1 ℃" Width="*" Binding="{Binding Tc, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                    <DataGridTextColumn Header="电压 %" Width="*" Binding="{Binding Vo, StringFormat=\{0:F2\},Mode=OneWay}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </TabItem>
+
+
+
+                </TabControl>
+            </TabItem>
+
+        </TabControl>
+
+    <!--=====底端信息栏===================================================================================================-->
+        <TextBlock Text="{Binding Dev.ErrorInfo }" Grid.Row="1" Grid.Column="0" FontSize="18" FontWeight="Bold" Foreground="#FFFF7400" Margin="5" />
+        <TextBox Text="{Binding Dev.RunMode, Converter={StaticResource RunModeConverter},Mode=OneWay}" Grid.Row="1" Grid.Column ="1" Height="35" Width="110" IsReadOnly="True"/>
+        <TextBlock Text="测温通讯：" Grid.Row="1" Grid.Column ="2" Style="{StaticResource TextBlock2}" Margin="0"/>
+        <Ellipse Fill="{Binding Dev.TComStatus.StatusCollor, Converter={StaticResource ComCollorConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="1" Grid.Column ="3"/>
+        <TextBlock Text="控温通讯：" Grid.Row="1" Grid.Column ="4" Style="{StaticResource TextBlock2}" Margin="0"/>
+        <Ellipse Fill="{Binding Dev.AOComStatus.StatusCollor, Converter={StaticResource ComCollorConverter}}" Style="{StaticResource Ellipse1}" Grid.Row="1" Grid.Column ="5"/>
+        <TextBox Text="{Binding Dev.TimeNow,StringFormat='{}{0:yyyy年MM月dd日 HH:mm:ss}', Mode=OneWay}" Grid.Row="1" Grid.Column ="6" Width="300" IsReadOnly="True" FontSize="20" Style="{StaticResource TextBox3}" />
+    </Grid>
+</mah:MetroWindow>

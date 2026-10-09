@@ -1,0 +1,225 @@
+﻿<mah:MetroWindow x:Class="BRX.View.DevSet.DevSetView_BisicParam"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:BRX.View.DevSet"
+                 xmlns:vmd="clr-namespace:BRX.ViewModel"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 mc:Ignorable="d"
+                 Title="装置基本参数配置" Height="800" Width="1200"
+                 WindowStartupLocation="CenterScreen" Background="White" ShowInTaskbar="True"
+                 Closing="Window_Closing" WindowState="Normal " ResizeMode ="CanMinimize"
+                 DataContext ="{Binding Source ={StaticResource Locator },Path =MainVM}">
+
+    <Grid Background ="WhiteSmoke">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Header="基本参数" Grid.Row="0" Grid.Column ="0" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="绘图更新周期（ms）：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="单曲线总点数：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.PlotPeriod , Mode=TwoWay}" ToolTip ="纯数字，默认100"   Grid.Row="0" Grid.Column ="1" Width="150" Height="32"/>
+                <TextBox Text="{Binding Dev.PointsPerLine , Mode=TwoWay}" ToolTip ="纯数字，默认10000"   Grid.Row="1" Grid.Column ="1" Width="150" Height="32"/>
+
+                <TextBlock Text="计算周期（ms）：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="通讯周期(ms)：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.Period_BLL , Mode=TwoWay}" Grid.Row="2" Grid.Column ="1" Width="150" Height="32"/>
+                <TextBox Text="{Binding Dev.Period_Comm , Mode=TwoWay}" Grid.Row="3" Grid.Column ="1" Width="150" Height="32"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="用户参数" Grid.Row="0" Grid.Column ="1" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="是否载入上次试验：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="启动时载入" IsChecked ="{Binding Dev.IsLoadLastExpPowerOn,Mode =TwoWay}" ToolTip ="软件启动时自动载入上次退出前的试验，否则载入默认试验"  Grid.Row="0" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="自动转入下一个试样：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="自动转入" IsChecked ="{Binding Dev.IsAutoContinue,Mode =TwoWay}" Grid.Row="1" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <TextBlock Text="加密检测报告：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="加密" IsChecked ="{Binding Dev.EncryptRPT,Mode =TwoWay}" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <TextBlock Text="隐藏试样2-5：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="隐藏" IsChecked ="{Binding Dev.HideSY2345,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="测试标准选择：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <ComboBox ItemsSource="{Binding Dev.StdList}" SelectedItem ="{Binding Dev .StdSelected, Mode=TwoWay}" Grid.Row="4" Grid.Column ="1" Width="180" Height="32"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="工厂参数" Grid.Row="1" Grid.Column ="0" Visibility="{Binding Dev.IsAdmin, Converter={StaticResource BVConverter}}" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="温度采集模块型号：" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="AO模块型号：" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <ComboBox ItemsSource="{Binding Dev.TModelTypeList}" SelectionChanged="SelectionChanged" SelectedValue ="{Binding Dev .TModelType, Mode=TwoWay}" Grid.Row="0" Grid.Column ="1" Width="150" Height="25"/>
+                <ComboBox Name="AOModelComb" ItemsSource="{Binding Dev.AOModelTypeList}" SelectionChanged="SelectionChanged" SelectedValue ="{Binding Dev .AOModelType, Mode=TwoWay}" Grid.Row="1" Grid.Column ="1" Width="150" Height="25"/>
+
+                <TextBlock Text="是否有功率模块：" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="有功率模块" IsChecked ="{Binding Dev.WithPowerSenser,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="2" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="使用回归计算平衡电压：" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <CheckBox Content="用线性回归" IsChecked ="{Binding Dev.UseLRCalcU,Mode =TwoWay}" Checked="CheckBoxChanged" Unchecked="CheckBoxChanged" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="软启动时长（分钟）：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="最大输出电压（%）：" Grid.Row="5" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.SoftBootTime , Mode=TwoWay}" Grid.Row="4" Grid.Column ="1" Width="150" Height="32"/>
+                <TextBox Text="{Binding Dev.RatioAoOutMax , Mode=TwoWay}" Grid.Row="5" Grid.Column ="1" Width="150" Height="32"/>
+
+                <TextBlock Text="加热炉内阻（Ω）：" Grid.Row="6" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.R , Mode=TwoWay}" Grid.Row="6" Grid.Column ="1" Width="150" Height="32"/>
+                <TextBlock Text="输入电压（V）：" Grid.Row="7" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.Vin , Mode=TwoWay}" Grid.Row="7" Grid.Column ="1" Width="150" Height="32"/>
+
+                <TextBlock Text="系统辨识输出V（%）：" Grid.Row="8" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.VOut_ID , Mode=TwoWay}" Grid.Row="8" Grid.Column ="1" Width="150" Height="32"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="控温及平衡参数" Grid.Row="1" Grid.Column ="1" Visibility="{Binding Dev.IsAdmin, Converter={StaticResource BVConverter}}"  BorderBrush="Black" BorderThickness="1" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="控温允许误差（℃）:" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="控温允许漂移（℃）:" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="控温允许偏差（℃）:" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.TCtlErrPermit , Mode=TwoWay}" Grid.Row="0" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.TCtlDriftPermit , Mode=TwoWay}" Grid.Row="1" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.TCtlDeviationPermit , Mode=TwoWay}" Grid.Row="2" Grid.Column ="1" Width="130" Height="25"/>
+
+                <TextBlock Text="稳定判定时长（s）:" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="控温判定间隔（s）:" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.Time_Stabilize , Mode=TwoWay}" ToolTip ="计算多少秒内的温度是否满足稳定条件" Grid.Row="3" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.Period_Stabilize , Mode=TwoWay}" ToolTip ="每隔多少秒计算一次"   Grid.Row="4" Grid.Column ="1" Width="130" Height="25"/>
+
+                <TextBlock Text="最终平衡判定时长（s）:" Grid.Row="5" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="最终平衡判定间隔（s）:" Grid.Row="6" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="最终平衡第一次判定（s）:" Grid.Row="7" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="最终平衡允许漂移（℃）：" Grid.Row="8" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.Time_FinalEqu , Mode=TwoWay}" ToolTip ="计算多少秒内的温度是否满足平衡条件"   Grid.Row="5" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.Period_FinalEqu , Mode=TwoWay}" ToolTip ="若不满足平衡条件，隔多少秒再次分析"   Grid.Row="6" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.Time_FinalEquEvalFist , Mode=TwoWay}" ToolTip ="测试开始多少秒后，分析是否达到平衡条件"   Grid.Row="7" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.TFinalEquDriftPermit , Mode=TwoWay}" Grid.Row="8" Grid.Column ="1" Width="130" Height="25"/>
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="恒功率参数" Grid.Row="0" Grid.Column ="2" Grid.RowSpan="2" Visibility="{Binding Dev.IsAdmin, Converter={StaticResource BVConverter}}"  BorderBrush="Black" BorderThickness="1" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="10">
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--<TextBlock Text="放入试样后输出降低U：" Grid.Row="10" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.OutReduceU , Mode=TwoWay}" Grid.Row="10" Grid.Column ="1" Width="200" Height="33"/>
+                <TextBlock Text="放入试样后输出降低P：" Grid.Row="11" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.OutReduceP , Mode=TwoWay}" Grid.Row="11" Grid.Column ="1" Width="200" Height="33"/>-->
+                <TextBlock Text="温控PID起始温度（℃）:" Grid.Row="0" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip="第一次达到设定值以上后启动PID控温（连续试验时，后续试验始终PID控温）"/>
+                <TextBlock Text="温控PID前延时（s）:" Grid.Row="1" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip="PID温控前，低功率加热一段时间以稳定炉温"/>
+                <TextBlock Text="延时期间输出电压:" Grid.Row="2" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip="PID温控前，低功率加热一段时间以稳定炉温" Visibility="{Binding Dev.WithoutPowerSenser, Converter={StaticResource BVConverter}}"/>
+                <TextBlock Text="延时期间输出功率:" Grid.Row="3" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip="PID温控前，低功率加热一段时间以稳定炉温" Visibility="{Binding Dev.WithPowerSenser, Converter={StaticResource BVConverter}}"/>
+                <TextBox Text="{Binding Dev.TStartPID , Mode=TwoWay}" Grid.Row="0" Grid.Column ="1" Width="130" Height="25" ToolTip="第一次达到设定值以上后启动PID控温（连续试验时，后续试验始终PID控温）"/>
+                <TextBox Text="{Binding Dev.DelayTime , Mode=TwoWay}" Grid.Row="1" Grid.Column ="1" Width="130" Height="25" ToolTip="PID温控前，低功率加热一段时间以稳定炉温"/>
+                <TextBox Text="{Binding Dev.TDelayU , Mode=TwoWay}" Grid.Row="2" Grid.Column ="1" Width="130" Height="25" ToolTip="PID温控前，低功率加热一段时间以稳定炉温" Visibility="{Binding Dev.WithoutPowerSenser, Converter={StaticResource BVConverter}}"/>
+                <TextBox Text="{Binding Dev.TDelayP , Mode=TwoWay}" Grid.Row="3" Grid.Column ="1" Width="130" Height="25" ToolTip="PID温控前，低功率加热一段时间以稳定炉温" Visibility="{Binding Dev.WithPowerSenser, Converter={StaticResource BVConverter}}"/>
+
+                <TextBlock Text="自动计算恒功率值：" Grid.Row="4" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip ="30min试验阶段的功率=温度准备阶段最后几分钟的平均值"/>
+                <TextBlock Text="固定功率值(W)：" Grid.Row="5" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip ="30min试验阶段使用的恒功率值" Visibility="{Binding Dev.IsFixedPower, Converter={StaticResource BVConverter}}"/>
+                <TextBlock Text="固定电压值(%)：" Grid.Row="6" Grid.Column ="0" Style="{StaticResource TextBlock2}" ToolTip ="30min试验阶段使用的恒电压百分比" Visibility="{Binding Dev.IsFixedPower, Converter={StaticResource BVConverter}}"/>
+                <TextBlock Text="自动计算功率时间(s)：" Grid.Row="7" Grid.Column ="0" Style="{StaticResource TextBlock2}" Visibility="{Binding Dev.AutoPower, Converter={StaticResource BVConverter}}"/>
+                <CheckBox Content="自动计算" IsChecked ="{Binding Dev.AutoPower,Mode =TwoWay}" ToolTip ="30min试验阶段的功率=温度准备阶段最后几分钟的平均值"  Grid.Row="4" Grid.Column="1" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <TextBox Text="{Binding Dev.InitSumUI_P , Mode=TwoWay}" Grid.Row="5" Grid.Column ="1" Width="130" Height="25" ToolTip ="30min试验阶段使用的恒功率值" IsEnabled="{Binding Dev.WithPowerSenser}" Visibility="{Binding Dev.IsFixedPower, Converter={StaticResource BVConverter}}"/>
+                <TextBox Text="{Binding Dev.InitSumUI_U , Mode=TwoWay}" Grid.Row="6" Grid.Column ="1" Width="130" Height="25" ToolTip ="30min试验阶段使用的恒电压百分比" IsEnabled="{Binding Dev.WithoutPowerSenser}" Visibility="{Binding Dev.IsFixedPower, Converter={StaticResource BVConverter}}"/>
+                <TextBox Text="{Binding Dev.TimeCalcPower , Mode=TwoWay}" Grid.Row="7" Grid.Column ="1" Width="130" Height="25" Visibility="{Binding Dev.AutoPower, Converter={StaticResource BVConverter}}"/>
+               
+                <TextBlock Text="初始积分值U：" Grid.Row="8" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBlock Text="初始积分值P：" Grid.Row="9" Grid.Column ="0" Style="{StaticResource TextBlock2}"/>
+                <TextBox Text="{Binding Dev.InitSumUI_U , Mode=TwoWay}" Grid.Row="8" Grid.Column ="1" Width="130" Height="25"/>
+                <TextBox Text="{Binding Dev.InitSumUI_P , Mode=TwoWay}" Grid.Row="9" Grid.Column ="1" Width="130" Height="25"/>
+            </Grid>
+        </GroupBox>
+
+        <StackPanel  Grid.Row="2" Grid.Column ="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBlock Text="管理员登录：" Style="{StaticResource TextBlock2}"/>
+            <PasswordBox  Name="AdminPasswordBox" Width="200" Height="40"  Margin="5 0 5 0" FontSize="20" PasswordChar="*" Background="White" Foreground="Blue"
+                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                          vmd:LoginPasswordBoxHelper.IsPasswordBindingEnable="True"
+                          vmd:LoginPasswordBoxHelper.Password="{Binding Dev.PassWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          KeyDown="AdminPasswordBox_OnKeyDown"/>
+            <Button Content="管理员登录" Command="{Binding MainWinCommand}" CommandParameter="8888" HorizontalAlignment="Left" Width="110" Margin="5 0 5 0" Foreground="Blue"/>
+            <Button Content="退出登录" Command="{Binding MainWinCommand}" CommandParameter="8889" HorizontalAlignment="Right" Width="110" Margin="5 0 5 0" Foreground="Blue"/>
+        </StackPanel>
+       
+        <Button Content="保存设置" Command="{Binding MainWinCommand}" CommandParameter="8299" Grid.Row="2" Grid.Column ="2" HorizontalAlignment="Left" IsDefault="True" Margin="5 0 0 0"/>
+        <Button Content="取消修改" Command="{Binding MainWinCommand}" CommandParameter="8199"  Grid.Row="2" Grid.Column ="2" HorizontalAlignment="Right" IsCancel="True" Margin="0 0 5 0"/>
+    </Grid>
+</mah:MetroWindow>

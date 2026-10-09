@@ -1,0 +1,1198 @@
+﻿<mah:MetroWindow x:Class="BRX.View.DevSet.DevSetView_AIOCal"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:BRX.View.DevSet"
+                 xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                 GlowBrush="{DynamicResource MahApps.Brushes.Accent}"
+                 mc:Ignorable="d"
+                 Title="模拟量调零标校" Height="768" Width="1024"
+                 WindowStartupLocation="CenterScreen" Background="White" ShowInTaskbar="True"
+                 Closing="Window_Closing" WindowState="Normal " ResizeMode ="CanMinimize"
+                 xmlns:converterPath="clr-namespace:BRX.View"
+                 DataContext ="{Binding Source ={StaticResource Locator },Path =MainVM}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=" *"/>
+            <RowDefinition Height=" 60"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
+        <!--=====数据信息===================================================================================================-->
+        <TabControl Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="stretch" VerticalAlignment="stretch" Margin="5" mah:TabControlHelper.UnderlineBrush="Red" >
+            <TabItem Header="【T1】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="炉内热电偶T1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DarkKhaki"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DarkKhaki"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="炉内平均" Command="{Binding MainWinCommand}" CommandParameter="8501" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="炉内温度1和炉内温度2平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[0].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[0].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[0].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[0].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【T2】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="炉内热电偶T2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="BurlyWood" />
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="BurlyWood" />
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="炉内平均" Command="{Binding MainWinCommand}" CommandParameter="8501" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="炉内温度1和炉内温度2平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[1].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[1].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[1].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[1].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tsc】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="试样中心热电偶Tsc">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSkyBlue" />
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSkyBlue" />
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="试样平均" Command="{Binding MainWinCommand}" CommandParameter="8503" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="试样表面和试样中心温度平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[2].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[2].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[2].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[2].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tss】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="试样表面热电偶Tss">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DeepSkyBlue" />
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DeepSkyBlue" />
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="试样平均" Command="{Binding MainWinCommand}" CommandParameter="8504" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="试样表面和试样中心温度平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[3].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[3].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[3].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[3].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tfc】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="校准热电偶—炉内Tfc">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="YellowGreen"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="YellowGreen"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <!--<Button Content="标定平均" Command="{Binding MainWinCommand}" CommandParameter="8505" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="标定中心温度和3个炉壁温度平均"/>-->
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[4].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[4].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[4].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[4].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tw1】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="校准热电偶—炉壁Tw1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DarkSeaGreen" />
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="DarkSeaGreen" />
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="炉壁标定平均" Command="{Binding MainWinCommand}" CommandParameter="8506" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="标定中心温度和3个炉壁温度平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[5].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[5].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[5].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[5].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tw2】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="校准热电偶—炉壁Tw2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSeaGreen" />
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSeaGreen" />
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="炉壁标定平均" Command="{Binding MainWinCommand}" CommandParameter="8507" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="标定中心温度和3个炉壁温度平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[6].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[5].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[5].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[6].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[6].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[6].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Tw3】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="校准热电偶—炉壁Tw3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="ForestGreen"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="ForestGreen"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} ℃}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="炉壁标定平均" Command="{Binding MainWinCommand}" CommandParameter="8508" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="标定中心温度和3个炉壁温度平均"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[7].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[7].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[7].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[7].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【Vo】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="控温电压输出比例Vo%">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="Orange"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="Orange"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} %}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} %}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} %}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="一键调零" Command="{Binding MainWinCommand}" CommandParameter="8509" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0" ToolTip ="当输入信号处于零点时可用"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AOList[0].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[0].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AOList[0].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AOList[0].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AOList[0].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【V】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="输出电压实测值" Visibility="{Binding Dev.WithPowerSenser, Converter={StaticResource BVConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightGray"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightGray"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} V}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} V}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} V}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="一键调零" Command="{Binding MainWinCommand}" CommandParameter="8509" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[8].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[8].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[8].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[8].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="【P】" Padding="5" mah:HeaderedControlHelper.HeaderFontSize="18" ToolTip="输出功率实测值" Visibility="{Binding Dev.WithPowerSenser, Converter={StaticResource BVConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                        <RowDefinition Height=" *"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row ="2" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSlateGray"/>
+                    <Border Grid.Row ="6" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="Black" BorderThickness="1" CornerRadius="5"  Margin="5" Padding="5" Background ="LightSlateGray"/>
+
+                    <TextBlock Text="量程下限：" Grid.Row ="0" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].SingalLowerRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].SingalUpperRange,Mode =TwoWay}" Grid.Row ="0" Grid.Column="2" IsEnabled =" False" Width="130"/>
+                    <TextBlock Text="零点修正值：" Grid.Row ="0" Grid.Column="3"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="斜率修正值：" Grid.Row ="0" Grid.Column="5"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].ZeroCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="4" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].KCalValue,Mode =TwoWay}" Grid.Row ="0" Grid.Column="6" ToolTip ="最终值=斜率*原始值+零点修正值" Width="130"/>
+
+                    <TextBlock Text="原  始  值：" Grid.Row ="1" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="标 定 后 值：" Grid.Row ="1" Grid.Column="2"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="校 正 后 值：" Grid.Row ="1" Grid.Column="4"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].ValueNonCalNonZero,Mode =TwoWay,StringFormat={}{0:0.00} W}"  Grid.Row ="1" Grid.Column="1" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].ValueCaledNonZero,Mode =TwoWay,StringFormat={}{0:0.00} W}"  Grid.Row ="1" Grid.Column="3" IsEnabled =" False" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].ValueFinal,Mode =TwoWay,StringFormat={}{0:0.00} W}"  Grid.Row ="1" Grid.Column="5" IsEnabled =" False" Width="130"/>
+
+                    <Button Content="一键调零" Command="{Binding MainWinCommand}" CommandParameter="8511" Grid.Row="1" Grid.Column ="6" Width=" 120" Height ="40" FontSize="16" Padding ="0"/>
+
+                    <TextBlock Text="标定点编号：" Grid.Row ="2" Grid.Column="0" Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="1号标定点" Grid.Row ="2" Grid.Column="1" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="2号标定点" Grid.Row ="2" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="3号标定点" Grid.Row ="2" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="4号标定点" Grid.Row ="2" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="5号标定点" Grid.Row ="2" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="6号标定点" Grid.Row ="2" Grid.Column="6" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="3" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[0].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[1].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[2].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[3].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[4].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[5].IsUse,Mode =TwoWay}" Grid.Row="3" Grid.Column="6" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="4" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[0].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="1" IsEnabled ="{Binding Dev.AIList[10].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[1].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[2].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[3].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[4].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[5].StdValue ,Mode =TwoWay}" Grid.Row ="4" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="5" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[0].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[1].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[1].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[2].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[2].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[3].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[3].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[4].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[4].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[5].ViewValue ,Mode =TwoWay}" Grid.Row ="5" Grid.Column="6"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[5].IsUse}" Width="130"/>
+
+                    <TextBlock Text="标定点编号" Grid.Row ="6" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBlock Text="7号标定点" Grid.Row ="6" Grid.Column="1"  Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="8号标定点" Grid.Row ="6" Grid.Column="2" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="9号标定点" Grid.Row ="6" Grid.Column="3" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="10号标定点" Grid.Row ="6" Grid.Column="4" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+                    <TextBlock Text="11号标定点" Grid.Row ="6" Grid.Column="5" Style="{StaticResource TextBlock1}" FontWeight="Bold"/>
+
+                    <TextBlock Text="启用标定点" Grid.Row ="7" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[6].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="1" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[7].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="2" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[8].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="3" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[9].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="4" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+                    <CheckBox Content="启用" IsChecked ="{Binding Dev.AIList[10].CalPoints[10].IsUse,Mode =TwoWay}" Grid.Row="7" Grid.Column="5" FontSize="16" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                    <TextBlock Text="标  准  值" Grid.Row ="8" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[6].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[7].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[8].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[9].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[10].StdValue ,Mode =TwoWay}" Grid.Row ="8" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[10].IsUse}" Width="130"/>
+
+                    <TextBlock Text="显  示  值" Grid.Row ="9" Grid.Column="0"  Style="{StaticResource TextBlock1}"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[6].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="1"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[6].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[7].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="2"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[7].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[8].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="3"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[8].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[9].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="4"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[9].IsUse}" Width="130"/>
+                    <TextBox Text="{Binding Dev.AIList[10].CalPoints[10].ViewValue ,Mode =TwoWay}" Grid.Row ="9" Grid.Column="5"  IsEnabled ="{Binding Dev.AIList[10].CalPoints[10].IsUse}" Width="130"/>
+
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+        <Button Content="保存设置" Command="{Binding MainWinCommand}" CommandParameter="8299" Grid.Row="1" Grid.Column ="1"  HorizontalAlignment="Left" VerticalAlignment="Center" IsDefault="True"/>
+        <Button Content="取消修改" Command="{Binding MainWinCommand}" CommandParameter="8199"  Grid.Row="1" Grid.Column ="1" HorizontalAlignment="Right" VerticalAlignment="Center" IsCancel="True"/>
+        <TextBlock Text="修改后请先保存再关闭窗口！" Margin ="10"  Grid.Row="1" Grid.Column ="0" FontSize="20"  Style="{StaticResource TextBlock2}" Foreground="OrangeRed"/>
+    </Grid>
+</mah:MetroWindow>

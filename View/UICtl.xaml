@@ -1,0 +1,757 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BRX"
+    xmlns:converterPath="clr-namespace:BRX.View">
+
+    <!--==========普通按钮==========-->
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="{TemplateBinding Control.BorderBrush}"
+                            Background="LightGray" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="snow"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="CadetBlue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========紧急按钮模板==========-->
+    <Style TargetType="{x:Type Button}" x:Key="EmStpButton">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="Red"
+                            Background="Yellow" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="Aqua"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="DarkOrchid"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========紧急复位模板==========-->
+    <Style TargetType="{x:Type Button}" x:Key="EmRstButton">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Red"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="Red"
+                            Background="GreenYellow" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="Aqua"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="DarkOrchid"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========主页按钮==========-->
+    <Style  TargetType="{x:Type Button}" x:Key="Button1" >
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="{TemplateBinding Control.BorderBrush}"
+                            Background="LimeGreen" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="snow"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="CadetBlue"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========加按钮==========-->
+    <ControlTemplate TargetType="Button" x:Key="Button+">
+        <Grid>
+            <Path Name="back" Stretch="Fill" Stroke="Black" Fill="LightGray"  Data="M885.333333 0h-746.666666C61.866667 0 0 61.866667 0 138.666667v744.533333C0 962.133333 61.866667 1024 138.666667 1024h744.533333c76.8 0 138.666667-61.866667 138.666667-138.666667v-746.666666C1024 61.866667 962.133333 0 885.333333 0zM768 554.666667H554.666667v213.333333c0 23.466667-19.2 42.666667-42.666667 42.666667s-42.666667-19.2-42.666667-42.666667V554.666667H256c-23.466667 0-42.666667-19.2-42.666667-42.666667s19.2-42.666667 42.666667-42.666667h213.333333V256c0-23.466667 19.2-42.666667 42.666667-42.666667s42.666667 19.2 42.666667 42.666667v213.333333h213.333333c23.466667 0 42.666667 19.2 42.666667 42.666667s-19.2 42.666667-42.666667 42.666667z"/>
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="back"  Property="Fill" Value="snow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="back" Property="Fill" Value="CadetBlue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--==========减按钮==========-->
+    <ControlTemplate TargetType="Button" x:Key="Button-">
+        <Grid>
+            <Path Name="back" Stretch="Fill" Stroke="Black" Fill="LightGray"  Data="M885.333333 0h-746.666666C61.866667 0 0 61.866667 0 138.666667v744.533333C0 962.133333 61.866667 1024 138.666667 1024h744.533333c76.8 0 138.666667-61.866667 138.666667-138.666667v-746.666666C1024 61.866667 962.133333 0 885.333333 0zM768 554.666667H256c-23.466667 0-42.666667-19.2-42.666667-42.666667s19.2-42.666667 42.666667-42.666667h512c23.466667 0 42.666667 19.2 42.666667 42.666667s-19.2 42.666667-42.666667 42.666667z"/>
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="back"  Property="Fill" Value="snow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="back" Property="Fill" Value="CadetBlue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--==========减减按钮==========-->
+    <ControlTemplate TargetType="Button" x:Key="Button--">
+        <Grid>
+            <Path Name="back" Stretch="Fill" Stroke="Black" Fill="LightGray"  Data="M425.389 489.286c-6.271 6.271-9.399 14.495-9.386 22.714-0.013 8.219 3.115 16.443 9.386 22.714l415.897 415.897c12.516 12.516 32.809 12.516 45.325 0 6.245-6.245 9.373-14.426 9.386-22.611H896V96h-0.003c-0.013-8.185-3.141-16.366-9.386-22.611-12.516-12.516-32.809-12.516-45.325 0L425.389 489.286zM607.997 928H608V781.325L361.389 534.714c-6.271-6.271-9.399-14.495-9.386-22.714-0.013-8.219 3.115-16.443 9.386-22.714L608 242.675V96c0-17.673-14.327-32-32-32l-0.048 0.003c-8.203-0.001-16.407 3.128-22.666 9.387L137.389 489.286c-6.271 6.271-9.399 14.495-9.386 22.714-0.013 8.219 3.115 16.443 9.386 22.714l415.897 415.897c12.516 12.516 32.809 12.516 45.325 0 6.245-6.245 9.372-14.426 9.386-22.611z"/>
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="back"  Property="Fill" Value="snow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="back" Property="Fill" Value="CadetBlue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--==========加加按钮==========-->
+    <ControlTemplate TargetType="Button" x:Key="Button++">
+        <Grid>
+            <Path Name="back" Stretch="Fill" Stroke="Black" Fill="LightGray"  Data="M598.611 534.714c6.271-6.271 9.399-14.495 9.38599999-22.714 0.013-8.219-3.115-16.443-9.38599999-22.714l-415.897-415.897c-12.516-12.516-32.809-12.516-45.325 0-6.245 6.245-9.373 14.42600001-9.386 22.611L128 96 128 928l0.003 0c0.013 8.185 3.141 16.366 9.386 22.611 12.516 12.516 32.809 12.516 45.325 0L598.611 534.714zM416.003 96L416 96 416 242.675 662.611 489.286c6.271 6.271 9.399 14.495 9.386 22.714 0.013 8.219-3.115 16.443-9.386 22.714L416 781.325 416 928c0 17.67299999 14.327 32 32 32l0.048-0.003c8.203 0.001 16.407-3.128 22.666-9.387L886.611 534.714c6.271-6.271 9.399-14.495 9.38600001-22.714 0.013-8.219-3.115-16.443-9.38600001-22.714l-415.897-415.897c-12.516-12.516-32.809-12.516-45.325 0-6.245 6.245-9.372 14.426-9.386 22.611z"/>
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter TargetName="back"  Property="Fill" Value="snow"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter TargetName="back" Property="Fill" Value="CadetBlue"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--==========橙色按钮模板==========-->
+    <Style TargetType="{x:Type Button}" x:Key="OrgButton">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="Red"
+                            Background="Orange" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="Aqua"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="DarkOrchid"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========深灰按钮模板==========-->
+    <Style TargetType="{x:Type Button}" x:Key="DgButton">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="{StaticResource HeiTi}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="back" 
+                            BorderBrush="Red"
+                            Background="DimGray" 
+                            Width="{TemplateBinding ContentControl.Width}"
+                            Height="{TemplateBinding ContentControl.Height}"
+                            BorderThickness="0.8" CornerRadius="3" >
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="Aqua"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="back" Property="Background" Value="White"/>
+                            <Setter Property="Foreground" Value="DarkOrchid"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========TextBlock1，居中==========-->
+    <Style x:Key="TextBlock1" TargetType="TextBlock">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--==========TextBlock2，左对齐==========-->
+    <Style x:Key="TextBlock2" TargetType="TextBlock">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextAlignment" Value="Left"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--==========Label==========-->
+    <Style TargetType="{x:Type Label}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
+<!--==========TextBox==========-->
+    <Style TargetType="{x:Type TextBox}">
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="AutoWordSelection" Value="True"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="LightGreen"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--==========TextBox2，黑色背景居中，数码字体==========-->
+    <Style x:Key="TextBox2" TargetType="{x:Type TextBox}">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontFamily" Value="{DynamicResource DigifaceWide}"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="AutoWordSelection" Value="True"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="LightGreen"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--==========TextBox3，黑色背景居中，默认字体==========-->
+    <Style x:Key="TextBox3" TargetType="{x:Type TextBox}">
+        <Setter Property="Margin" Value="0,5,5,5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="AutoWordSelection" Value="True"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="LightGreen"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--==========TextBox4，拉伸宽度==========-->
+    <Style x:Key="TextBox4" TargetType="{x:Type TextBox}">
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="AllowDrop" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="AutoWordSelection" Value="True"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="DarkOrchid" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="Background" Value="LightGreen"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--======ComboBox========-->
+    <Style TargetType="{x:Type ComboBox}">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <!--======ListBox，列表项========-->
+    <Style TargetType="{x:Type ListBoxItem}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="border" CornerRadius="0" Margin="2" BorderBrush="Red"
+                                        BorderThickness="0,0,0,0.2">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Margin="10,0,0,0" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="Red" />
+                            <Setter TargetName="border" Property="Background" Value="white" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="Red" />
+                            <Setter TargetName="border" Property="BorderThickness" Value="4,0,0,0.5" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="IsSelected" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <MultiTrigger.Setters>
+                                <Setter Property="Foreground" Value="#FF46679A" />
+                                <Setter TargetName="border" Property="Background" Value="white" />
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF46679A" />
+                                <Setter TargetName="border" Property="BorderThickness" Value="0,0,0,0.5" />
+                            </MultiTrigger.Setters>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--======DataGrid========-->
+    <!--行样式触发-->
+    <!--网格线颜色-->
+    <Style TargetType="{x:Type DataGrid}">
+        <Setter Property="CanUserResizeColumns" Value="false"/>
+        <Setter Property="Background" Value="DeepSkyBlue" />
+        <Setter Property="BorderBrush" Value="DarkGray" />
+        <Setter Property="HorizontalGridLinesBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="Black"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalGridLinesBrush">
+            <Setter.Value>
+                <SolidColorBrush Color="DarkGray"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--标题栏样式-->
+    <Style TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="40" />
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Foreground" Value="#323433" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <Border x:Name="BackgroundBorder" BorderThickness="0,1,0,1" 
+                                BorderBrush="Black" 
+                                Width="Auto">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill"  Width="8" Height="6" Fill="White" Margin="0,0,50,0" 
+                                      VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                            <Rectangle Width="1" Fill="DarkGray" HorizontalAlignment="Right" Grid.ColumnSpan="1" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--背景色改变必须先设置cellStyle 因为cellStyle会覆盖rowStyle样式-->
+    <Style  TargetType="{x:Type DataGridRow}">
+        <Setter Property="Background" Value="#F2F2F2" />
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontSize" Value="16" />
+        <Style.Triggers>
+            <!--隔行换色-->
+            <Trigger Property="AlternationIndex" Value="0" >
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+            <Trigger Property="AlternationIndex" Value="1" >
+                <Setter Property="Background" Value="WhiteSmoke" />
+            </Trigger>
+
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="LightBlue"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Orange" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--显示单元格样式触发-->
+    <Style TargetType="{x:Type DataGridCell}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                    <TextBlock TextAlignment="Center" VerticalAlignment="Center" FontSize="16" ><InlineUIContainer>
+                        <ContentPresenter />
+                    </InlineUIContainer></TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="False">
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!--Slider模板-->
+    <LinearGradientBrush x:Key="SliderBackground"  StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#59ccfc"/>
+        <GradientStop Offset="0.5" Color="#00b3fe"/>
+        <GradientStop Offset="1" Color="#59ccfc"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SliderThumb"  StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#FFD9D3E8"/>
+        <!--<GradientStop Offset="1" Color="#dfdfdf"/>-->
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SliderText"  StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#7cce45"/>
+        <GradientStop Offset="1" Color="#4ea017"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SliderBackground2"  StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="Gray"/>
+        <GradientStop Offset="0.5" Color="Gray"/>
+        <GradientStop Offset="1" Color="#59ccfc"/>
+    </LinearGradientBrush>
+    <Style x:Key="Slider_RepeatButton" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="{StaticResource SliderBackground}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Slider_RepeatButton1" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Gray" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Slider_Thumb" TargetType="Thumb">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid MinHeight="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="{StaticResource SliderBackground}"/>
+                        <Border Grid.ColumnSpan="2" CornerRadius="4"  Background="{StaticResource SliderThumb}" Width="18">
+                            <!--<TextBlock Text="||" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Slider_CustomStyle" TargetType="Slider">
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <!--<Grid.ColumnDefinitions>  
+                                <ColumnDefinition Width="80"/>  
+                                <ColumnDefinition/>  
+                                <ColumnDefinition Width="40"/>  
+                            </Grid.ColumnDefinitions>-->
+                        <Grid.Effect>
+                            <DropShadowEffect BlurRadius="8" ShadowDepth="1" />
+                        </Grid.Effect>
+                        <!--<Border HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="1,1,0,1" Background="{StaticResource SliderText}" Width="80" CornerRadius="8,0,0,8"/>
+                            <Border Grid.Column="2" HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="0,1,1,1" Background="{StaticResource SliderText}" Width="40" CornerRadius="0,8,8,0"/>
+                            <TextBlock Grid.Column="2" Text="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Tag}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14"/>
+                            <TextBlock Grid.Column="0" Text="{Binding ElementName=PART_Track,Path=Value,StringFormat=\{0:N0\}}" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" DataContext="{Binding}" />-->
+
+                        <Border Grid.Column="1" BorderBrush="Red" BorderThickness="0" CornerRadius="0,0,0,0">
+                            <Track Grid.Column="1" Name="PART_Track">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource Slider_RepeatButton}"  
+                                Command="Slider.DecreaseLarge"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource Slider_RepeatButton1}"  
+                                Command="Slider.IncreaseLarge"/>
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource Slider_Thumb}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!--==========圆圈==========-->
+    <Style x:Key="Ellipse1" TargetType="Ellipse">
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Stroke" Value="Black"/>
+        <Setter Property="Fill" Value="DarkGray"/>
+    </Style>
+
+    <!--==========ToolTip==========-->
+    <Style TargetType="ToolTip">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <TextBlock TextWrapping="Wrap" Width="300" FontSize="16" FontWeight="Bold" 
+                               Foreground="OrangeRed"  Background="WhiteSmoke" 
+                               Text="{TemplateBinding ContentControl.Content}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--==========FocusVisualStyle(控件获取键盘焦点样式)==========-->
+    <Style x:Key="NewFocusStyle">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle StrokeThickness="1" Stroke="Red"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <!--==========值转换器==========-->
+    <converterPath:BoolToTickConverter x:Key="BTConverter"/>
+    <converterPath:IntToDirConverter x:Key="BDConverter"/>
+
+    <converterPath:BoolToNegativeConverter x:Key="BNConverter"/>
+    
+    <converterPath:BoolToCollorGConverter x:Key="BGConverter"/>
+
+    <converterPath:IntToCollorOConverter x:Key="ComCollorConverter"/>
+
+    <converterPath:BoolToVisibilityConverter  x:Key="BVConverter"/>
+    <converterPath:BoolNotToVisibilityConverter  x:Key="BVNotConverter"/>
+    <converterPath:IsRXConverter  x:Key="IsRXConverter"/>
+    <converterPath:IsWYCConverter  x:Key="IsWYCConverter"/>
+
+    <converterPath:RunModeConverter x:Key="RunModeConverter"/>
+    <converterPath:TestStageConverter x:Key="TestStageConverter"/>
+
+    <converterPath:StrToParityConverter x:Key="ParityConverter"/>
+    <converterPath:StrToStopBitsConverter x:Key="StopBitsConverter"/>
+
+    <converterPath:FSYTypeConverter x:Key="FSYTypeConverter"/>
+
+    <converterPath:IsRoundnessConverter x:Key="IsRoundnessConverter"/>
+
+    <converterPath:UnitTypeConverter x:Key="UnitTypeConverter"/>
+
+    <converterPath:BoolToYWConverter x:Key="BYWConverter"/>
+
+    <converterPath:TimeToStrConverter x:Key="TimeConverter"/>
+    <converterPath:IntToMMSSStrConverter x:Key="IntToMMSSConverter"/>
+    <converterPath:DoubleToMMSSStrConverter x:Key="DoubleToMMSSConverter"/>
+    <converterPath:WallCalHeithtConverter x:Key="WallCalHeithtConverter"/>
+    
+</ResourceDictionary>

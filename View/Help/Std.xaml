@@ -1,0 +1,81 @@
+﻿<Window
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:local="clr-namespace:XFL.View"
+x:Class="XFL.View.DevSet.Std"
+ mc:Ignorable="d"
+ Title="参考标准" Height="768" Width="1024" ResizeMode ="CanMinimize"
+ WindowStartupLocation="CenterScreen" Background="White" ShowInTaskbar="True"
+ Closing="Window_Closing" WindowState="Normal "
+ DataContext ="{Binding Source ={StaticResource Locator },Path =MainVM}">
+
+    <Window.Resources>
+        <!--普通按钮模板-->
+        <ControlTemplate TargetType="{x:Type Button}" x:Key="Button1">
+            <Border Margin ="10,5,10,5" Background="LightGray" x:Name="back" BorderBrush="Black" BorderThickness="0.8"
+                    CornerRadius="3" Padding="5"
+                    TextBlock.Foreground="Black" TextBlock.FontSize="18" Width="100" Height ="40">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="back" Property="Background" Value="snow"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter TargetName="back" Property="Background" Value="CadetBlue"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!--Label模板1，参数名-->
+        <Style x:Key="Label1" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10,5,5,5"/>
+        </Style>
+        <!--Label模板2，提示信息-->
+        <Style x:Key="Label2" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Coral"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <!--TextBox模板1，试验信息-->
+        <Style x:Key="TextBox1" TargetType="{x:Type TextBox}">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Margin" Value="5,5,5,5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Background" Value="GhostWhite"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        </Style>
+        <!--ComboBox模板1-->
+        <Style x:Key="ComboBox1" TargetType="{x:Type ComboBox}">
+            <Setter Property="Width" Value="120" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,5,10,5"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background ="WhiteSmoke">
+        <WindowsFormsHost x:Name="winFormHost" Margin="10"/>
+    </Grid>
+</Window>

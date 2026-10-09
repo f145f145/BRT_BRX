@@ -1,0 +1,24 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BRX.View"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="BRX.View.LoadingView"
+        mc:Ignorable="d"
+        Title="建筑材料不燃性测试仪 GB/T5464-2010 ISO1182-2020"
+        Width="600" Height="400" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="True">
+
+    <Window.Background>
+        <ImageBrush ImageSource="..\Data\Resources\Images\Loading.jpg"/>
+    </Window.Background>
+
+    <Grid x:Name="Grid1">
+        <Label x:Name="Info" Content="启动成功！" Margin="65,99,10,0" FontSize ="36" Foreground ="Brown" Height="76" VerticalAlignment="Top"/>
+
+        <Button x:Name ="ReAuthorize"  Content="重新注册" Click="Button_ReReg_Click" FontSize ="25" Margin="65,242,324,73"  />
+        <Button Content="退  出" Click="Button_Quit_Click"  FontSize ="25" Margin="310,240,70,71" />
+
+    </Grid>
+</Window>

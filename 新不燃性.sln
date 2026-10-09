@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31605.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "建筑材料不燃性测试仪", "建筑材料不燃性测试仪.csproj", "{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3CF124F9-6517-4CA0-8A9E-0CB0867BBF61}
+	EndGlobalSection
+EndGlobal

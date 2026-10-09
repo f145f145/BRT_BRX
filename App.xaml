@@ -1,0 +1,30 @@
+<Application x:Class="BRX.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:BRX" 
+             StartupUri="View/LoadingView.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             d1p1:Ignorable="d" 
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+    <Application.Resources>
+        <ResourceDictionary>
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:BRX.ViewModel" />
+
+            <FontFamily x:Key="DigifaceWide">Data/Resources/Fonts/#DigifaceWide</FontFamily>
+            <FontFamily x:Key="HeiTi">Data\Resources\Fonts\HeiTi</FontFamily>
+
+            <ResourceDictionary.MergedDictionaries>
+                <!--MahApps.Metro-->
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+                <!--MahApps.Metro-->
+
+                <!--自定义样式-->
+                <ResourceDictionary Source="View/UICtl.xaml"/>
+                <!--自定义样式-->
+
+                <!--自定义滚动条样式-->
+                <ResourceDictionary Source="View/ScrollViewDictionary.xaml" />
+                <!--自定义滚动条样式-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,16 +1,41 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "E:\\Work\\Uper\\BRT_BRX\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|e:\\work\\uper\\brt_brx\\view\\centercalview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|solutionrelative:view\\centercalview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|e:\\work\\uper\\brt_brx\\model\\dev\\commstatusmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|solutionrelative:model\\dev\\commstatusmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|e:\\work\\uper\\brt_brx\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4E07EF0A-EBAF-4786-8AC8-D89DBC24CBE0}|\u5EFA\u7B51\u6750\u6599\u4E0D\u71C3\u6027\u6D4B\u8BD5\u4EEA.csproj|solutionrelative:viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 15,
-          "SelectedChildIndex": -1,
+          "DockedWidth": 134,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CenterCalView.xaml",
+              "DocumentMoniker": "E:\\Work\\Uper\\BRT_BRX\\View\\CenterCalView.xaml",
+              "RelativeDocumentMoniker": "View\\CenterCalView.xaml",
+              "ToolTip": "E:\\Work\\Uper\\BRT_BRX\\View\\CenterCalView.xaml",
+              "RelativeToolTip": "View\\CenterCalView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-10-20T06:51:28.511Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
@@ -25,11 +50,41 @@
             },
             {
               "$type": "Bookmark",
+              "Name": "ST:0:0:{7f3c9e14-5a62-4b8d-9e01-c6d2a84b7f35}"
+            },
+            {
+              "$type": "Bookmark",
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CommStatusModel.cs",
+              "DocumentMoniker": "E:\\Work\\Uper\\BRT_BRX\\Model\\Dev\\CommStatusModel.cs",
+              "RelativeDocumentMoniker": "Model\\Dev\\CommStatusModel.cs",
+              "ToolTip": "E:\\Work\\Uper\\BRT_BRX\\Model\\Dev\\CommStatusModel.cs",
+              "RelativeToolTip": "Model\\Dev\\CommStatusModel.cs",
+              "ViewState": "AQIAACwAAAAAAAAAAAArwEoAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-20T06:45:14.397Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "E:\\Work\\Uper\\BRT_BRX\\ViewModel\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "ViewModel\\MainViewModel.cs",
+              "ToolTip": "E:\\Work\\Uper\\BRT_BRX\\ViewModel\\MainViewModel.cs",
+              "RelativeToolTip": "ViewModel\\MainViewModel.cs",
+              "ViewState": "AQIAAEMAAAAAAAAAAAAAwIUBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-20T06:42:14.589Z",
+              "EditorCaption": ""
             }
           ]
         }

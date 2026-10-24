@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BRX.View"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="BRX.View.LoadingView"
         mc:Ignorable="d"
-        Title="建筑材料不燃性测试仪 GB/T5464-2010 ISO1182-2020"
+        Title="建筑材料不燃性测试仪 GB/T5464 ISO1182"
         Width="600" Height="400" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         ShowInTaskbar="True">
 

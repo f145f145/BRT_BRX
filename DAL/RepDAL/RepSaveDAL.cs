@@ -574,7 +574,7 @@ namespace BRX.DAL.RepDAL
                 row = (HSSFRow)sht0.GetRow(4);
                 cell = (HSSFCell)row.GetCell(3);
                 if (Dev.IsStd2023)
-                    str = "《GBT 5464-2023 建筑材料不燃性试验方法》";
+                    str = "《GBT 5464-2026 建筑材料不燃性试验方法》";
                 cell.SetCellValue(str);
                 //检测单位
                 row = (HSSFRow)sht0.GetRow(5);

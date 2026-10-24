@@ -885,7 +885,7 @@ namespace BRX.Model.Dev
         /// </summary>
         public bool IsStd2023
         {
-            get { return StdSelected== "GB/T 5464-2023"?true:false; }
+            get { return StdSelected== "GB/T 5464-2026"?true:false; }
         }
 
         /// <summary>
@@ -900,7 +900,7 @@ namespace BRX.Model.Dev
         /// <summary>
         /// 标准列表
         /// </summary>
-        public ObservableCollection<string> _stdList = new ObservableCollection<string>() { "GB/T 5464-2010", "GB/T 5464-2023" };
+        public ObservableCollection<string> _stdList = new ObservableCollection<string>() { "GB/T 5464-2010", "GB/T 5464-2026" };
         /// <summary>
         /// 标准列表
         /// </summary>

@@ -604,13 +604,24 @@ namespace BRX.DAL.RepDAL
                 cell = (HSSFCell)row.GetCell(3);
                 cell.SetCellValue(ExpBRXDQ.CJCZ);
 
+
                 //试样信息
-                //样品标识
+                //样品名称
                 row = (HSSFRow)sht0.GetRow(11);
                 cell = (HSSFCell)row.GetCell(6);
-                cell.SetCellValue(ExpBRXDQ.ZPBS);
-                //密度
+                cell.SetCellValue(ExpBRXDQ.YPMC);
+                //委托日期
+                cell = (HSSFCell)row.GetCell(17);
+                cell.SetCellValue(ExpBRXDQ.WTTime.ToLongDateString());
+                //样品标识
                 row = (HSSFRow)sht0.GetRow(12);
+                cell = (HSSFCell)row.GetCell(6);
+                cell.SetCellValue(ExpBRXDQ.ZPBS);
+                //样品编号
+                cell = (HSSFCell)row.GetCell(17);
+                cell.SetCellValue(ExpBRXDQ.YPNO);
+                //密度
+                row = (HSSFRow)sht0.GetRow(13);
                 cell = (HSSFCell)row.GetCell(6);
                 cell.SetCellValue(ExpBRXDQ.MD);
                 //面密度
@@ -620,22 +631,50 @@ namespace BRX.DAL.RepDAL
                 cell = (HSSFCell)row.GetCell(20);
                 cell.SetCellValue(ExpBRXDQ.HD);
                 //结构
-                row = (HSSFRow)sht0.GetRow(13);
+                row = (HSSFRow)sht0.GetRow(14);
                 cell = (HSSFCell)row.GetCell(6);
                 cell.SetCellValue(ExpBRXDQ.JGXX);
                 //状态调节信息
-                row = (HSSFRow)sht0.GetRow(14);
+                row = (HSSFRow)sht0.GetRow(15);
                 cell = (HSSFCell)row.GetCell(6);
                 cell.SetCellValue(ExpBRXDQ.ZTTJ);
                 //抽样程序
-                row = (HSSFRow)sht0.GetRow(15);
+                row = (HSSFRow)sht0.GetRow(16);
                 cell = (HSSFCell)row.GetCell(6);
                 cell.SetCellValue(ExpBRXDQ.CYCX);
+
+                ////试样信息
+                ////样品标识
+                //row = (HSSFRow)sht0.GetRow(11);
+                //cell = (HSSFCell)row.GetCell(6);
+                //cell.SetCellValue(ExpBRXDQ.ZPBS);
+                ////密度
+                //row = (HSSFRow)sht0.GetRow(12);
+                //cell = (HSSFCell)row.GetCell(6);
+                //cell.SetCellValue(ExpBRXDQ.MD);
+                ////面密度
+                //cell = (HSSFCell)row.GetCell(13);
+                //cell.SetCellValue(ExpBRXDQ.MMD);
+                ////厚度
+                //cell = (HSSFCell)row.GetCell(20);
+                //cell.SetCellValue(ExpBRXDQ.HD);
+                ////结构
+                //row = (HSSFRow)sht0.GetRow(13);
+                //cell = (HSSFCell)row.GetCell(6);
+                //cell.SetCellValue(ExpBRXDQ.JGXX);
+                ////状态调节信息
+                //row = (HSSFRow)sht0.GetRow(14);
+                //cell = (HSSFCell)row.GetCell(6);
+                //cell.SetCellValue(ExpBRXDQ.ZTTJ);
+                ////抽样程序
+                //row = (HSSFRow)sht0.GetRow(15);
+                //cell = (HSSFCell)row.GetCell(6);
+                //cell.SetCellValue(ExpBRXDQ.CYCX);
 
                 //汇总测试数据
                 for (int i = 0; i < 5; i++)
                 {
-                    row = (HSSFRow)sht0.GetRow(17 + i);
+                    row = (HSSFRow)sht0.GetRow(18 + i);
                     //炉内平均
                     cell = (HSSFCell)row.GetCell(3);
                     cell.SetCellValue(ExpBRXDQ.SpList[i].TUpAvg);

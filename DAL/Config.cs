@@ -56,7 +56,7 @@ namespace BRX.DAL
         public static string IDDBName = "IDDB.db";                                                      //系统辨识数据库
         //报告模板
         public static string ExpRep10FormName = "报告模板-2010.xls";                                    //老标准报告模板文件名
-        public static string ExpRep22FormName = "报告模板-2022.xls";                                    //新标准报告模板文件名
+        public static string ExpRep22FormName = "报告模板-2026.xls";                                    //新标准报告模板文件名
         public static string WallCalRepFormName = "炉壁校准报告模板.xls";                               //炉壁校准报告模板文件名
         public static string CenterCalRepFormName = "炉内校准报告模板.xls";                             //炉内校准报告模板文件名
 

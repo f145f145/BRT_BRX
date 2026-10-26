@@ -24,6 +24,7 @@ using System.IO;
 using BRX.Model.Enums;
 using NPOI.SS.UserModel;
 using NPOI.HSSF.UserModel;
+using ControlzEx.Standard;
 
 namespace BRX.DAL.RepDAL
 {
@@ -479,6 +480,7 @@ namespace BRX.DAL.RepDAL
             }
             #endregion
 
+
             //数据最终导出
             try
             {
@@ -498,7 +500,7 @@ namespace BRX.DAL.RepDAL
         }
 
         /// <summary>
-        /// 保存测试试验报告（2022）
+        /// 保存测试试验报告（2026）
         /// </summary>
         private void SaveBRXRPT_2022()
         {
@@ -1005,6 +1007,173 @@ namespace BRX.DAL.RepDAL
                 }
 
             }
+            #endregion
+
+
+            #region 测试报告第8-12页
+            int[] rowQty = { 0, 0, 0, 0, 0, 0 };
+
+            int indexStyle2 = iWorkbookRPT.GetSheetIndex("测试1");
+            ISheet shtStyle2 = iWorkbookRPT.GetSheetAt(indexStyle2);
+            HSSFRow row02;
+            HSSFCell cell02;
+
+            ICellStyle style20 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style21 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style22 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style23 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style24 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style25 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style26 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style27 = iWorkbookRPT.CreateCellStyle();
+            ICellStyle style28 = iWorkbookRPT.CreateCellStyle();
+
+            IDataFormat dataformat2 = iWorkbookRPT.CreateDataFormat();
+
+            row02 = (HSSFRow)shtStyle.GetRow(2);
+
+            cell02 = (HSSFCell)row02.GetCell(0);
+            style20.CloneStyleFrom(cell02.CellStyle);
+
+            cell02 = (HSSFCell)row02.GetCell(1);
+            style21.CloneStyleFrom(cell02.CellStyle);
+            style21.DataFormat = dataformat2.GetFormat("0");
+
+            cell02 = (HSSFCell)row02.GetCell(2);
+            style22.CloneStyleFrom(cell02.CellStyle);
+
+            cell02 = (HSSFCell)row02.GetCell(3);
+            style23.CloneStyleFrom(cell02.CellStyle);
+            style23.DataFormat = dataformat2.GetFormat("0.00");
+
+            cell02 = (HSSFCell)row02.GetCell(4);
+            style24.CloneStyleFrom(cell02.CellStyle);
+            style24.DataFormat = dataformat2.GetFormat("0.00");
+
+            cell02 = (HSSFCell)row02.GetCell(5);
+            style25.CloneStyleFrom(cell02.CellStyle);
+            style25.DataFormat = dataformat2.GetFormat("0.00");
+
+            cell02 = (HSSFCell)row02.GetCell(6);
+            style26.CloneStyleFrom(cell02.CellStyle);
+            style25.DataFormat = dataformat2.GetFormat("0.00");
+
+            cell02 = (HSSFCell)row02.GetCell(7);
+            style27.CloneStyleFrom(cell02.CellStyle);
+
+            cell02 = (HSSFCell)row02.GetCell(8);
+            style28.CloneStyleFrom(cell02.CellStyle);
+
+            for (int spNum = 1; spNum <= 5; spNum++)
+            {
+                try
+                {
+                    string sheetName = "测试" + spNum.ToString();
+                    int sheetIndex = iWorkbookRPT.GetSheetIndex(sheetName);
+
+                    ISheet sht = iWorkbookRPT.GetSheetAt(sheetIndex);
+                    string str;
+
+                    HSSFRow row = (HSSFRow)sht.GetRow(0);
+                    HSSFCell cell = (HSSFCell)row.GetCell(0);
+
+                    if ((ExpBRXDQ.SpList[spNum - 1].RecList_Stb != null) && (ExpBRXDQ.SpList[spNum - 1].RecList_Stb.Count > 0))
+                    {
+                        int rowNum = 0;   
+                        int rowNumStart = rowNum + 2;
+
+                        DateTime startTime = DateTime.MinValue;
+                        if (ExpBRXDQ.SpList[spNum - 1].RecList_Test.Count > 0)
+                            startTime = ExpBRXDQ.SpList[spNum - 1].RecList_Test[0].RecTime;
+
+                        for (int i = 0; i < ExpBRXDQ.SpList[spNum - 1].RecList_Test.Count; i++)
+                        {
+                            rowNum = i + rowNumStart;
+                            row = (HSSFRow)sht.GetRow(rowNum);
+                            //序号
+                            cell = (HSSFCell)row.GetCell(0);
+                            cell.SetCellValue(i+1);
+                            cell.CellStyle = style20;
+                            //时间
+                            cell = (HSSFCell)row.GetCell(1);
+                            cell.SetCellValue((ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].RecTime- startTime).TotalSeconds);
+                            cell.CellStyle = style21;                          
+
+                            //炉内温度1
+                            cell = (HSSFCell)row.GetCell(2);
+                            cell.SetCellValue(ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].T1);
+                            cell.CellStyle = style23;
+                            //炉内温度2
+                            cell = (HSSFCell)row.GetCell(3);
+                            cell.SetCellValue(ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].T2);
+                            cell.CellStyle = style24;
+                            //试样中心温度
+                            cell = (HSSFCell)row.GetCell(4);
+                            cell.SetCellValue(ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].Tsc);
+                            cell.CellStyle = style25;
+                            //试样表面温度
+                            cell = (HSSFCell)row.GetCell(5);
+                            cell.SetCellValue(ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].Tss);
+                            cell.CellStyle = style26;
+                            //有火焰
+                            cell = (HSSFCell)row.GetCell(6);
+                            str = ExpBRXDQ.SpList[spNum - 1].RecList_Test[i].IsFired ? "√" : "×";
+                            cell.SetCellValue(str);
+                            cell.CellStyle = style27;
+                            //备注
+                            cell = (HSSFCell)row.GetCell(7);
+                            str = "";
+                            cell.SetCellValue(str);
+                            cell.CellStyle = style28;
+
+                            rowQty[spNum - 1]++;
+                        }
+                    }
+
+                    if (Dev.EncryptRPT)
+                        sht.ProtectSheet("12345678");//设置密码保护
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message + "\r\n试样" + spNum + "数据失败！");
+                    throw;
+                }
+
+            }
+            #endregion
+
+
+            #region 曲线页
+            try
+            {
+                int sheetIndex13 = iWorkbookRPT.GetSheetIndex("曲线图");
+                ISheet sht13 = iWorkbookRPT.GetSheetAt(sheetIndex13);
+
+                HSSFRow row = (HSSFRow)sht13.GetRow(0);
+                HSSFCell cell = (HSSFCell)row.GetCell(0);
+                cell.SetCellValue(rowQty[0]);
+
+                cell = (HSSFCell)row.GetCell(1);
+                cell.SetCellValue(rowQty[1]);
+
+                cell = (HSSFCell)row.GetCell(2);
+                cell.SetCellValue(rowQty[2]);
+
+                cell = (HSSFCell)row.GetCell(3);
+                cell.SetCellValue(rowQty[3]);
+
+                cell = (HSSFCell)row.GetCell(4);
+                cell.SetCellValue(rowQty[4]);
+
+                if (Dev.EncryptRPT)
+                    sht13.ProtectSheet("12345678");//设置密码保护
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message + "\r\n导出报告第1页失败！");
+                throw;
+            }
+
             #endregion
 
             //数据最终导出
